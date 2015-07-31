@@ -16,11 +16,11 @@ class XmlExport implements ExportInterface {
         echo '<?xml version="1.0" encoding="utf-8"?>';
         echo '<root>';
         foreach ($data as $input => $outputs) {
-            echo "<input $format=$input>";
+            echo "<data $format=$input>";
             foreach($outputs as $output) {
                 echo "<similar $format=$output>$output</similar>";
             }
-            echo "</input>";
+            echo "</data>";
         }
         echo '</root>';
     }

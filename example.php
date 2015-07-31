@@ -24,13 +24,13 @@ $input = array();
 foreach ($exampleData as $id) {
     $input[] = intval($id);
 }
-$input = array_unique($data);
+$input = array_unique($input);
 
 $worldCat = new WorldCatService();
 
 $output = array();
 foreach($input as $id) {
-    $output[$id] = $worldCat->{$type}->getEditions($id);
+    $output[$id] = $worldCat->{$format}->getEditions($id);
 }
 
 echo ExportFactory::makeExporter($outputType)->getFrom($format,$output);

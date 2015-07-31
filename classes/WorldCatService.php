@@ -8,7 +8,7 @@ namespace WorldCat {
         protected $idType;
         protected $url;
 
-        public function construct($idType) {
+        public function __construct($idType) {
             $this->idType = urlencode($idType);
             $this->url = "http://x{$idType}.worldcat.org/webservices/xid/{$idType}/";
         }
@@ -34,8 +34,8 @@ namespace WorldCat {
         protected function genRequestURL(array $params) {
             $id = $params['identifier'];
             unset($params['identifier']);
-            
-            return $this->url.$id.'?'.http_build_query($params);
+
+            return $this->url . $id . '?' . http_build_query($params);
         }
     }
 }
