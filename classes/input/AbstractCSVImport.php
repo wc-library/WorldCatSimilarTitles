@@ -11,6 +11,7 @@
  *
  * @author bgarcia
  */
+namespace input;
 abstract class AbstractCSVImport {
 
     protected function cleanCSVStr($str) {

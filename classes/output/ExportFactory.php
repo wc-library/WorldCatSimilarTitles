@@ -11,6 +11,7 @@
  *
  * @author bgarcia
  */
+namespace output;
 class ExportFactory {
     public static function makeExporter($outputType) {
         switch ($outputType) {

@@ -11,6 +11,7 @@
  *
  * @author bgarcia
  */
+namespace input;
 class CSVFileImport extends AbstractCSVImport {
     public function getFormID() {
         return 'fileCSVInput';

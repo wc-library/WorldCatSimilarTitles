@@ -7,9 +7,13 @@
  */
 
 /**
+ * Description of JsonExporter
  *
  * @author bgarcia
  */
-interface ExportInterface {
-    public function getFrom($format, array $IDs);
+namespace output;
+class JsonExport implements ExportInterface {
+    public function getFrom($format, array $IDs) {
+        return json_encode($IDs);
+    }
 }

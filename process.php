@@ -30,6 +30,6 @@ foreach($list as $id) {
     $output[$id] = $worldCat->{'isbn'}->getEditions($id);
 }
 
-echo ExportFactory::makeExporter('xml')->getFrom('isbn',$output);
+echo output\ExportFactory::makeExporter('xml')->getFrom('isbn',$output);
 
 

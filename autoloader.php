@@ -5,5 +5,6 @@
  */
 
 spl_autoload_register(function ($class) {
-    require_once "classes/$class.php";
+    $classpath = str_replace("\\","/",$class);
+    require_once "classes/$classpath.php";
 });

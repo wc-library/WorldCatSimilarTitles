@@ -10,8 +10,8 @@ require_once "autoloader.php";
     </head>
     <body>
         <?php
-        $txtInput = new CSVTextInput;
-        $fileInput = new CSVFileImport;
+        $txtInput = new input\CSVTextInput;
+        $fileInput = new input\CSVFileImport;
 
         if (!isset($_POST['submit'])) {
             echo"<div>
