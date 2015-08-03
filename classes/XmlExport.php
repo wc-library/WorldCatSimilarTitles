@@ -13,15 +13,15 @@
  */
 class XmlExport implements ExportInterface {
     public function getFrom($format, array $data) {
-        echo '<?xml version="1.0" encoding="utf-8"?>';
-        echo '<root>';
+        echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        echo "<root>";
         foreach ($data as $input => $outputs) {
-            echo "<data $format=$input>";
+            echo "\n\n<data $format='$input'>";
             foreach($outputs as $output) {
-                echo "<similar $format=$output>$output</similar>";
+                echo "\n<similar $format='$output'>$output</similar>";
             }
-            echo "</data>";
+            echo "\n</data>";
         }
-        echo '</root>';
+        echo "\n</root>";
     }
 }
