@@ -11,6 +11,6 @@
  * @author bgarcia
  */
 namespace output;
-interface ExportInterface {
-    public function getFrom($format, array $IDs);
+abstract class AbstractExporter {
+    public abstract function getFrom($format, array $IDs);
 }

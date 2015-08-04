@@ -12,11 +12,11 @@
  * @author bgarcia
  */
 namespace output;
-class ExportFactory {
+class Factory {
     public static function makeExporter($outputType) {
         switch ($outputType) {
-            case 'json' : return new JsonExport;
-            case 'xml' :  return new XmlExport;
+            case 'json' : return new \output\Json;
+            case 'xml' :  return new \output\Xml;
             default:      return null;
         }
     }

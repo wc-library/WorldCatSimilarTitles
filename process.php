@@ -23,13 +23,13 @@ for ($i=0; $i<$n; ++$i) {
 }
 $list = array_unique($list,SORT_NUMERIC);
 
-$worldCat = new WorldCatService();
+$worldCat = new \oclc\WorldCatService('buswell');
 
 $output = array();
 foreach($list as $id) {
-    $output[$id] = $worldCat->{'isbn'}->getEditions($id);
+    $output[$id] = $worldCat->xid->getEditions('isbn',$id);
 }
 
-echo output\ExportFactory::makeExporter('xml')->getFrom('isbn',$output);
+echo \output\Factory::makeExporter('xml')->getFrom('isbn',$output);
 
 

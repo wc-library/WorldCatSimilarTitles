@@ -12,7 +12,7 @@
  * @author bgarcia
  */
 namespace output;
-class XmlExport implements ExportInterface {
+class Xml extends \output\AbstractExporter {
     public function getFrom($format, array $data) {
         echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
         echo "<root>";

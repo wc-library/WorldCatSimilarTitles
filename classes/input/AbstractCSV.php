@@ -12,7 +12,7 @@
  * @author bgarcia
  */
 namespace input;
-abstract class AbstractCSVImport {
+abstract class AbstractCSV {
 
     protected function cleanCSVStr($str) {
 

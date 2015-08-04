@@ -12,7 +12,7 @@
  * @author bgarcia
  */
 namespace input;
-class CSVFileImport extends AbstractCSVImport {
+class File extends \input\AbstractCSV {
     public function getFormID() {
         return 'fileCSVInput';
     }

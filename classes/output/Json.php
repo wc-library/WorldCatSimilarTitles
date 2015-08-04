@@ -12,7 +12,7 @@
  * @author bgarcia
  */
 namespace output;
-class JsonExport implements ExportInterface {
+class Json extends \output\AbstractExporter {
     public function getFrom($format, array $IDs) {
         return json_encode($IDs);
     }
