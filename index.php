@@ -16,9 +16,9 @@ require_once "autoloader.php";
         if (!isset($_POST['submit'])) {
             echo"<div>
                 <form action='{$_SERVER['PHP_SELF']}' method='post' enctype='multipart/form-data'>
-                   <div colspan='2'>".$txtInput->formElement()."</div>
+                   <div colspan='2'>" . $txtInput->formElement() . "</div>
                        <br /><br /><br />
-                   ".$fileInput->formElement()."
+                   " . $fileInput->formElement() . "
                    <input type='submit' name='submit' />
                 </div>";
         } else {
@@ -26,22 +26,21 @@ require_once "autoloader.php";
             $fileData = $fileInput->getString();
 
             $values = "";
-            if ($txtData!=FALSE) {
+            if ($txtData != FALSE) {
                 $values .= $txtData;
             }
 
-            if ($txtData!=FALSE && $fileData!=FALSE)
+            if ($txtData != FALSE && $fileData != FALSE)
                 $values .= ',';
 
-            if ($fileData!=FALSE) {
+            if ($fileData != FALSE) {
                 $values .= $fileData;
             }
 
             echo "<form id=\"CSVForm\" action=\"process.php\" method=\"post\">
             <input type=\"hidden\" name=\"csv\" value=\"$values\" />";
-
             ?><script type='text/javascript'>
-                $(document).ready(function() {
+                $(document).ready(function () {
                     $("#CSVForm").submit();
                 });
             </script><?php
