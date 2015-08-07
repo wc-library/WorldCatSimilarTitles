@@ -29,6 +29,6 @@ $worldCat = new \oclc\WorldCatService(\util\Config::$library);
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 echo "<root>";
 foreach ($list as $id) {
-    echo $worldCat->lookup('isbn', $id);
+    echo $worldCat->lookup('isbn', $id)->asXml();
 }
 echo '</root>';

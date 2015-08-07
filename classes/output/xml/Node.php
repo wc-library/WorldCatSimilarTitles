@@ -1,8 +1,8 @@
 <?php
 
-namespace output;
+namespace output\xml;
 
-class XmlNode {
+class Node {
     public $tag;
     public $data;
 
@@ -21,9 +21,9 @@ class XmlNode {
 
     public static function make($tag,$attrStr,$data) {
         if(is_array($data) || is_object($data)) {
-            return new XmlNode($tag,$attrStr,$data);
+            return new Node($tag,$attrStr,$data);
         } else {
-            return new XmlLeaf($tag,$attrStr,$data);
+            return new Leaf($tag,$attrStr,$data);
         }
     }
 

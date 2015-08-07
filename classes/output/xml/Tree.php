@@ -1,8 +1,8 @@
 <?php
 
-namespace output;
+namespace output\xml;
 
-class XmlTree {
+class Tree {
     public $root;
     public function __construct ($tag,$attributes,$data) {
         $attrStr = "";
@@ -15,7 +15,7 @@ class XmlTree {
             $data = array($data);
         }
 
-        $this->root = XmlNode::make($tag,$attrStr,$data);
+        $this->root = Node::make($tag,$attrStr,$data);
     }
 
     public function asXml() {

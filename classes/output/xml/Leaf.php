@@ -1,8 +1,8 @@
 <?php
 
-namespace output;
+namespace output\xml;
 
-class XmlLeaf extends XmlNode {
+class Leaf extends Node {
     protected function __construct($tag,$attrStr,$data) {
         if (is_numeric($tag)) {
             $this->tag = 'leaf';
