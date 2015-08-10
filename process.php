@@ -23,12 +23,7 @@ for ($i = 0; $i < $n; ++$i) {
 }
 $list = array_unique($list, SORT_NUMERIC);
 
-$worldCat = new \oclc\WorldCatService(\util\Config::$library);
-
-
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-echo "<root>";
-foreach ($list as $id) {
-    echo $worldCat->lookup('isbn', $id)->asXml();
-}
-echo '</root>';
+$worldCat = new \oclc\WorldCatService();
+$resultset = $worldCat->batchLookup('isbn', $list);
+$xml = \output\Array2XML::createXML("resultset",$resultset);
+echo $xml->saveXML();
