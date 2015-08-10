@@ -24,6 +24,6 @@ for ($i = 0; $i < $n; ++$i) {
 $list = array_unique($list, SORT_NUMERIC);
 
 $worldCat = new \oclc\WorldCatService();
-$resultset = $worldCat->batchLookup('isbn', $list);
+$resultset = $worldCat->batchLookup('ISBN', $list);
 $xml = \output\Array2XML::createXML("resultset",$resultset);
 echo $xml->saveXML();

@@ -31,6 +31,14 @@
  *       echo $xml->saveXML();
  */
 
+/**
+ * changes by brandon-garcia <brandon.garcia@my.wheaton.edu>
+ * - added to namespace 'output' and corrected references to functions in
+ *   the global namespace
+ * - made functions treat objects as arrays to ease dealing with json
+ *
+ */
+
 
 namespace output;
 class Array2XML {
@@ -76,7 +84,8 @@ class Array2XML {
         $xml = self::getXMLRoot();
         $node = $xml->createElement($node_name);
 
-        if(\is_array($arr)){
+        if(\is_array($arr) || \is_object($arr)){
+            $arr = (array)$arr;
             // get the attributes first.;
             if(isset($arr['@attributes'])) {
                 foreach($arr['@attributes'] as $key => $value) {
@@ -104,13 +113,14 @@ class Array2XML {
         }
 
         //create subnodes using recursion
-        if(\is_array($arr)){
+        if(\is_array($arr) || \is_object($arr)){
+            $arr = (array)$arr;
             // recurse to get the node for that key
             foreach($arr as $key=>$value){
                 if(!self::isValidTagName($key)) {
                     throw new \Exception('[Array2XML] Illegal character in tag name. tag: '.$key.' in node: '.$node_name);
                 }
-                if(\is_array($value) && \is_numeric(key($value))) {
+                if((\is_array($value) || \is_object($value)) && \is_numeric(key($value))) {
                     // MORE THAN ONE NODE OF ITS KIND;
                     // if the new array is numeric index, means it is array of nodes of the same kind
                     // it should follow the parent key name
@@ -127,7 +137,7 @@ class Array2XML {
 
         // after we are done with all the keys in the array (if it is one)
         // we check if it has any text value, if yes, append it.
-        if(!\is_array($arr)) {
+        if(!(\is_array($arr) || \is_object($arr))) {
             $node->appendChild($xml->createTextNode(self::bool2str($arr)));
         }
 
