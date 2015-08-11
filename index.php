@@ -13,10 +13,7 @@ require_once "autoloader.php";
     </head>
     <body>
         <?php
-        $txtInput = new \input\CSVTextArea;
-        $fileInput = new \input\CSVFile;
-
-        if (!isset($_POST['submit'])) {?>
+        if (!isset($_POST['submit'])) { ?>
 
 
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
@@ -68,28 +65,38 @@ require_once "autoloader.php";
 
         <?php
         } else {
-            $txtData = $txtInput->getval();
-            $fileData = $fileInput->getval();
-
-            $values = "";
-            if ($txtData != FALSE) {
-                $values .= $txtData;
+            $idlist = "";
+            if (isset($_POST['idlist_textarea'])) {
+                $idlist .= \util\Misc::cleanCSV($_POST['idlist_textarea']);
             }
 
-            if ($txtData != FALSE && $fileData != FALSE)
-                $values .= ',';
+            if (isset($_POST['idlist_textarea']) && isset($_FILES['idlist_file'])) {
+                $idlist .= ',';
+            }
 
-            if ($fileData != FALSE) {
-                $values .= $fileData;
+            if (isset($_FILES['idlist_file'])) {
+                $idlist .= \util\Misc::cleanCSV(file_get_contents($_FILES['idlist_file']['name']));
+            }
+
+            if (isset($_POST['idtype'])) {
+                $idtype = $_POST['idtype'];
+            } else {
+                error_log("form param 'idtype' was not set!");
+            }
+
+            if ($idlist==="") {
+                error_log("form does not contain any IDs");
             }
 
             echo "<form id=\"CSVForm\" action=\"process.php\" method=\"post\">
-            <input type=\"hidden\" name=\"idlist\" value=\"$values\" />";
-            ?><script type='text/javascript'>
+            <input type=\"hidden\" name=\"idlist\" value=\"$idlist\" />
+            <input type=\"hidden\" name=\"idtype\" value=\"$idtype\" />
+
+            <script type='text/javascript'>
                 $(document).ready(function () {
-                    $("#CSVForm").submit();
+                    $('#CSVForm').submit();
                 });
-            </script><?php
+            </script>";
         }
         ?>
     </body>

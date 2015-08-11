@@ -13,6 +13,8 @@ if (!isset($_POST['idlist'])) {
 }
 
 $list = explode(',', $_POST['idlist']);
+$idtype = $_POST['idtype'];
+
 $n = count($list);
 for ($i = 0; $i < $n; ++$i) {
     if ($list[$i] == FALSE) {
@@ -24,6 +26,6 @@ for ($i = 0; $i < $n; ++$i) {
 $list = array_unique($list, SORT_NUMERIC);
 
 $worldCat = new \oclc\WorldCatService();
-$resultset = $worldCat->batchLookup('ISBN', $list);
+$resultset = $worldCat->batchLookup($idtype, $list);
 $xml = \output\Xml::create("resultset",$resultset);
 echo $xml->saveXML();
