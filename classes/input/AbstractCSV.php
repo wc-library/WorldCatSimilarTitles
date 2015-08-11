@@ -3,8 +3,11 @@
 namespace input;
 
 abstract class AbstractCSV {
+    protected $id;
+    protected $type;
+    protected $label;
 
-    protected function cleanCSVStr($str) {
+    protected function cleanstr($str) {
 
         $list = explode(',', htmlspecialchars(
                 preg_replace("/[\s-]+/", '', preg_replace("/[\n]+/", ',', $str)
@@ -21,9 +24,13 @@ abstract class AbstractCSV {
         return implode(',', array_unique($list, SORT_NUMERIC));
     }
 
-    public abstract function getFormID();
+    public function formElement() {
+        if ($this->type!=='select' && $this->type!=='textarea') {
+            $this->type = "input type='$this->type'";
+        }
+        return "<label for='$this->id'>$this->label</label>"
+            . "<$this->type id='$this->id' name='$this->id' ></$this->type>";
+    }
 
-    public abstract function formElement();
-
-    public abstract function getString();
+    public abstract function getval();
 }

@@ -36,12 +36,15 @@
  * - added to namespace 'output' and corrected references to functions in
  *   the global namespace
  * - made functions treat objects as arrays to ease dealing with json
- *
+ * - renamed file: Array2XML.php => Xml.php
+ * - renamed class: Array2XML => Xml
+ * - renamed method: getXMLRoot => getRoot
+ * - renamed method: createXML => create
  */
 
 
 namespace output;
-class Array2XML {
+class Xml {
 
     private static $xml = null;
 	private static $encoding = 'UTF-8';
@@ -64,8 +67,8 @@ class Array2XML {
      * @param array $arr - aray to be converterd
      * @return DomDocument
      */
-    public static function &createXML($node_name, $arr=array()) {
-        $xml = self::getXMLRoot();
+    public static function &create($node_name, $arr=array()) {
+        $xml = self::getRoot();
         $xml->appendChild(self::convert($node_name, $arr));
 
         self::$xml = null;    // clear the xml node in the class for 2nd time use.
@@ -81,7 +84,7 @@ class Array2XML {
     private static function &convert($node_name, $arr=array()) {
 
         //print_arr($node_name);
-        $xml = self::getXMLRoot();
+        $xml = self::getRoot();
         $node = $xml->createElement($node_name);
 
         if(\is_array($arr) || \is_object($arr)){
@@ -147,7 +150,7 @@ class Array2XML {
     /*
      * Get the root XML node, if there isn't one, create it.
      */
-    private static function getXMLRoot(){
+    private static function getRoot(){
         if(empty(self::$xml)) {
             self::init();
         }

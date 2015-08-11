@@ -1,7 +1,7 @@
 <?php
 
 namespace util;
-class Utility {
+class Misc {
     public static function objectToArray($obj) {
         if (is_object($obj)) {
             $obj = (array) $obj;
