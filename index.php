@@ -22,7 +22,7 @@ require_once "autoloader.php";
 <!-- Form Name -->
 <legend>WorldCat Similar Titles Search</legend>
 
-<!-- Select Basic -->
+<!-- Select Classification Type -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="idtype">ID Type</label>
   <div class="col-md-4">
@@ -35,7 +35,17 @@ require_once "autoloader.php";
   </div>
 </div>
 
-<!-- File Button -->
+<!-- Select Output Format -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="outputFormat">Output Format</label>
+  <div class="col-md-4">
+    <select id="outputFormat" name="outputFormat" class="form-control" required>
+      <option value="xml">XML</option>
+    </select>
+  </div>
+</div>
+
+<!-- Import IDs from file -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="idlist_file">Import IDs (CSV or line breaks)</label>
   <div class="col-md-4">
@@ -43,7 +53,7 @@ require_once "autoloader.php";
   </div>
 </div>
 
-<!-- Textarea -->
+<!-- Textarea for ID entry -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="idlist_textarea">ID List (CSV or line breaks)</label>
   <div class="col-md-4">
@@ -51,7 +61,7 @@ require_once "autoloader.php";
   </div>
 </div>
 
-<!-- Button -->
+<!-- Submit Button -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="submit"></label>
   <div class="col-md-4">
@@ -84,6 +94,12 @@ require_once "autoloader.php";
                 error_log("form param 'idtype' was not set!");
             }
 
+            if (isset($_POST['outputFormat'])) {
+                $outputFormat = $_POST['outputFormat'];
+            } else {
+                error_log("form param 'outputFormat' was not set!");
+            }
+
             if ($idlist==="") {
                 error_log("form does not contain any IDs");
             }
@@ -91,6 +107,7 @@ require_once "autoloader.php";
             echo "<form id=\"CSVForm\" action=\"process.php\" method=\"post\">
             <input type=\"hidden\" name=\"idlist\" value=\"$idlist\" />
             <input type=\"hidden\" name=\"idtype\" value=\"$idtype\" />
+            <input type=\"hidden\" name=\"outputFormat\" value=\"$outputFormat\" />
 
             <script type='text/javascript'>
                 $(document).ready(function () {
