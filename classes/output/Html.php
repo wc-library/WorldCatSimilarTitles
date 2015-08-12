@@ -18,6 +18,7 @@ class Html {
             ->css("bootstrap.min.css")
             ->css("bootstrap-theme.min.css")
             ->js('jquery.js')
+            ->js('bootstrap.min.js')
             ->html();
 
         echo "<body>";

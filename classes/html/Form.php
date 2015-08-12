@@ -31,16 +31,21 @@ final class Form {
     }
 
     private function setNodeId() {
-        if ($this->getNodeId()===$this->_prevSelect) {
+        if ($this->getNodeId()===$this->_prevSelect['node']) {
             $this->_prevSelect = FALSE;
             $this->_input[$this->getNodeId()] .= "</select></div></div>";
         }
         ++$this->_node_id;
     }
 
+    public function error($msg) {
+
+        return $this;
+    }
+
     public function select($name,$label,$required) {
         $this->setNodeId();
-        $this->_prevSelect = $this->getNodeId();
+        $this->_prevSelect = array('name'=>$name,'node'=>$this->getNodeId());
         $this->_input[$this->getNodeId()] = "<div class=\"form-group\">".self::EOF_LINE."
                 <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>".self::EOF_LINE."
                 <div class=\"col-md-4\">".self::EOF_LINE."
@@ -50,7 +55,13 @@ final class Form {
     }
 
     public function option($value,$txt) {
-        $this->_input[$this->getNodeId()] .= "<option value=\"$value\">$txt</option>".self::EOF_LINE;
+        $selected = "";
+       if ( isset($_POST[$this->_prevSelect['name']])
+           && $_POST[$this->_prevSelect['name']]===$value) {
+           $selected = "selected";
+           }
+
+        $this->_input[$this->getNodeId()] .= "<option value=\"$value\" $selected>$txt</option>".self::EOF_LINE;
         return $this;
     }
 
@@ -94,6 +105,13 @@ final class Form {
         foreach ($params as $name=>$value) {
             $form .= "<input type=\"hidden\" name=\"$name\" value=\"$value\"></input>".self::EOF_LINE;
         }
+
+        $form .= "<script type='text/javascript'>
+            $(document).ready(function () {
+                $('#$id').submit();
+            });
+            </script>";
+
         return $form;
     }
 
