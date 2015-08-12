@@ -9,7 +9,7 @@ final class Form {
     private $_input = array();
     private $_class = "form-horizontal";
 
-    private $_selectList = array();
+    private $_prevSelect = FALSE;
 
     private $_action;
     private $_enctype;
@@ -31,15 +31,19 @@ final class Form {
     }
 
     private function setNodeId() {
+        if ($this->getNodeId()===$this->_prevSelect) {
+            $this->_prevSelect = FALSE;
+            $this->_input[$this->getNodeId()] .= "</select></div></div>";
+        }
         ++$this->_node_id;
     }
 
     public function select($name,$label,$required) {
         $this->setNodeId();
-        $this->_selectList[] = $this->getNodeId();
+        $this->_prevSelect = $this->getNodeId();
         $this->_input[$this->getNodeId()] = "<div class=\"form-group\">
-            <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
-            <div class=\"col-md-4\">
+                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
+                <div class=\"col-md-4\">
             <select id=\"$name\" name=\"$name\" class=\"form-control\""
             . (($required)?'required':'') . ">";
         return $this;
@@ -52,36 +56,27 @@ final class Form {
 
     public function file($name,$label) {
         $this->setNodeId();
-        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">
-            <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
-            <div class=\"col-md-4\">
-              <input id=\"$name\" name=\"$name\" class=\"input-file\" type=\"file\">
-            </div>
-        </div>";
+        $this->_input[$this->getNodeId()] = $this->inputBlock($name,$label,
+            "<input class=\"input-file\"
+                id=\"$name\" name=\"$name\"  type=\"file\">");
         return $this;
     }
 
     public function textarea($name,$label) {
         $this->setNodeId();
-        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">
-            <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
-            <div class=\"col-md-4\">
-              <textarea class=\"form-control\" id=\"$name\" name=\"$name\"></textarea>
-            </div>
-        </div>";
+        $this->_input[$this->getNodeId()] = $this->inputBlock($name,$label,
+            "<textarea class=\"form-control\"
+                id=\"$name\" name=\"$name\"></textarea>");
         return $this;
     }
 
     public function button($name,$label,$class) {
         $this->setNodeId();
         $this->_input[$this->getNodeId()] =
-            "<div class=\"form-group\">
-                <label class=\"col-md-4 control-label\" for=\"$name\"></label>
-                <div class=\"col-md-4\">
-                  <button id=\"$name\" name=\"$name\" class=\"$class\">$label</button>
-                </div>
-            </div>";
-
+            $this->inputBlock($name, "",
+                "<button class=\"$class\"
+                    id=\"$name\"
+                    name=\"$name\">$label</button>");
         return $this;
     }
 
@@ -89,14 +84,19 @@ final class Form {
         $form = "<form class=\"$this->_class\" action=\"$this->_action\" method='post' enctype=\"$this->_enctype\">
             <legend>$this->_name</legend>";
 
-        foreach ($this->_selectList as $id) {
-            $this->_input[$id] .= "</select></div></div>";
-        }
-
         foreach ($this->_input as $input) {
             $form .= $input;
         }
 
         return $form."</form>";
+    }
+
+    private function inputBlock($name,$label,$inputString) {
+        return "<div class=\"form-group\">
+                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
+                <div class=\"col-md-4\">
+                $inputString
+                </div>
+                </div>";
     }
 }
