@@ -2,16 +2,17 @@
 require_once "autoloader.php";
 ?>
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta content="text/html; charset=UTF-8">
-        <title>WorldCat Similar Titles</title>
-        <link type="text/css" rel="stylesheet" href="css/normalize.css" />
-        <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
-        <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.min.css" />
-        <link type="text/css" rel="stylesheet" href="css/style.css" />
-        <script type='text/javascript' src='js/jquery.js'></script>
-    </head>
+<html lang="en"><?php
+    $html_header = new \html\Header;
+    echo $html_header
+        ->title("WorldCat Similar Titles")
+        ->css("normalize.css")
+        ->css("bootstrap.min.css")
+        ->css("bootstrap-theme.min.css")
+        ->css("style.css")
+        ->js('jquery.js')
+        ->html();
+        ?>
     <body>
         <?php
         if (!isset($_POST['submit'])) { ?>
