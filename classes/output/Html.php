@@ -10,85 +10,85 @@ class Html {
 ?>
 <!DOCTYPE html>
 <html>
-    <head lang="en">
-        <meta content="text/html; charset=UTF-8">
-        <title>WorldCat Similar Titles</title>
-        <link type="text/css" rel="stylesheet" href="css/normalize.css" />
-        <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
-        <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.min.css" />
-        <script type='text/javascript' src='js/jquery.js'></script>
-    </head>
-    <body>
-        <?php
-        echo "<div class=\"row\">
-            <div class=\"col-md-2\"></div>
-            <div class=\"col-md-6\">
-            <table class=\"table table-condensed table-bordered\">
-            <caption>library info</caption>
-            <tbody>
-            <tr><th>Institution Name</th><td>{$this->libinfo['institutionName']}</td></tr>
-            <tr><th>OCLC Symbol</th><td>{$this->libinfo['oclcSymbol']}</td></tr>
-            <tr><th>City</th><td>{$this->libinfo['city']}</td></tr>
-            <tr><th>State</th><td>{$this->libinfo['state']}</td></tr>
-            <tr><th>Country</th><td>{$this->libinfo['country']}</td></tr>
-            <tr><th>Postal Code</th><td>{$this->libinfo['postalCode']}</td></tr>
-            </tbody>
-            </table>
-            </div>
-            <div class=\"col-md-4\"></div>
-            </div>";
+    <?php
+        $html_header = new \html\Header;
+        echo $html_header
+            ->title("WorldCat Similar Titles")
+            ->css("normalize.css")
+            ->css("bootstrap.min.css")
+            ->css("bootstrap-theme.min.css")
+            ->js('jquery.js')
+            ->html();
+
+        echo "<body>";
 
         echo "<div class=\"row\">
             <div class=\"col-md-2\"></div>
-            <div class=\"col-md-8\">
-            <table class=\"table table-bordered table-hover table-condensed\">
-            <caption>$title</caption>",
-            $this->display_thead(),
-            $this->display_tbody(),
-            "</table>
+            <div class=\"col-md-6\">";
+
+        $table = new \html\Table();
+        $table->setClass("table table-condensed table-bordered")
+            ->setCaption("library info")
+            ->tr()
+                ->td("<b>Institution Name</b>")
+                ->td($this->libinfo['institutionName'])
+            ->tr()
+                ->td("<b>OCLC Symbol</b>")
+                ->td($this->libinfo['oclcSymbol'])
+            ->tr()
+                ->td("<b>City</b>")
+                ->td($this->libinfo['city'])
+            ->tr()
+                ->td("<b>State</b>")
+                ->td($this->libinfo['state'])
+            ->tr()
+                ->td("<b>Country</b>")
+                ->td($this->libinfo['country'])
+            ->tr()
+                ->td("<b>Postal Code</b>")
+                ->td($this->libinfo['postalCode']);
+        echo $table->html();
+
+        echo"</div>
+            <div class=\"col-md-4\"></div>
             </div>
+            <div class=\"row\">
+            <div class=\"col-md-2\"></div>
+            <div class=\"col-md-8\">";
+            $table = new \html\Table();
+            $table->setClass('table table-bordered table-hover table-condensed')
+                ->setCaption($title)
+                ->thead()
+                ->th("$this->idtype#")
+                ->th("Title")
+                ->th("Author")
+                ->th("Publisher")
+                ->th("Date")
+                ->th("Related $this->idtype#s");
+
+            foreach ($this->results as $query) {
+                $id = $id = $query['id'];
+                $rowcls = null;
+                if ($query['url']) {
+                    $id = "<a href=\"{$query['url']}\">$id</a>";
+                    $rowcls = "success";
+                }
+                $table->tr($rowcls)
+                    ->td($id)
+                    ->td($query['title'])
+                    ->td($query['author'])
+                    ->td($query['publisher'])
+                    ->td($query['date'])
+                    ->td(\implode("&nbsp;<br>",$query['related']));
+            }
+
+            echo $table->html();
+            echo "</div>
             <div class=\"col-md-2\"></div>
             </div>";
         ?>
     </body>
 </html>
 <?php
-    }
-
-    protected function displayLibraryInfo() {
-
-    }
-
-    protected function display_thead() {
-        echo "<thead>
-        <th>$this->idtype#</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Date</th>
-        <th>Related $this->idtype#s</th>
-        </thead>";
-    }
-
-    protected function display_tbody() {
-        echo "<tbody>";
-        foreach ($this->results as $query) {
-            $id = $query['id'];
-            $rowcls = "";
-            if ($query['url']) {
-                $id = "<a href=\"{$query['url']}\">$id</a>";
-                $rowcls = "class='success'";
-            }
-
-            echo "<tr $rowcls>
-                <td>$id</td>
-                <td>{$query['title']}</td>
-                <td>{$query['author']}</td>
-                <td>{$query['publisher']}</td>
-                <td>{$query['date']}</td>
-                <td>". \implode("&nbsp;<br>",$query['related'])."</td>
-                </tr>";
-        }
-        echo "</tbody>";
     }
 }
