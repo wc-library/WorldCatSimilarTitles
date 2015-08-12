@@ -70,7 +70,7 @@ class Html {
                 $id = $id = $query['id'];
                 $rowcls = null;
                 if ($query['url']) {
-                    $id = "<a href=\"{$query['url']}\">$id</a>";
+                    $id = "<a href=\"{$query['url']}\" target=\"_blank\">$id</a>";
                     $rowcls = "success";
                 }
                 $table->tr($rowcls)
