@@ -41,16 +41,16 @@ final class Form {
     public function select($name,$label,$required) {
         $this->setNodeId();
         $this->_prevSelect = $this->getNodeId();
-        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">
-                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
-                <div class=\"col-md-4\">
+        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">".self::EOF_LINE."
+                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>".self::EOF_LINE."
+                <div class=\"col-md-4\">".self::EOF_LINE."
             <select id=\"$name\" name=\"$name\" class=\"form-control\""
-            . (($required)?'required':'') . ">";
+            . (($required)?'required':'') . ">".self::EOF_LINE;
         return $this;
     }
 
     public function option($value,$txt) {
-        $this->_input[$this->getNodeId()] .= "<option value=\"$value\">$txt</option>";
+        $this->_input[$this->getNodeId()] .= "<option value=\"$value\">$txt</option>".self::EOF_LINE;
         return $this;
     }
 
@@ -83,20 +83,26 @@ final class Form {
     public function html() {
         $form = "<form class=\"$this->_class\" action=\"$this->_action\" method='post' enctype=\"$this->_enctype\">
             <legend>$this->_name</legend>";
-
         foreach ($this->_input as $input) {
             $form .= $input;
         }
-
         return $form."</form>";
     }
 
+    public static function makeHiddenForm($id,$action,$params) {
+        $form = "<form id='$id' action='$action' method='post'>".self::EOF_LINE;
+        foreach ($params as $name=>$value) {
+            $form .= "<input type=\"hidden\" name=\"$name\" value=\"$value\"></input>".self::EOF_LINE;
+        }
+        return $form;
+    }
+
     private function inputBlock($name,$label,$inputString) {
-        return "<div class=\"form-group\">
-                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>
-                <div class=\"col-md-4\">
+        return "<div class=\"form-group\">".self::EOF_LINE."
+                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>".self::EOF_LINE."
+                <div class=\"col-md-4\">".self::EOF_LINE."
                 $inputString
-                </div>
+                ".self::EOF_LINE."</div>".self::EOF_LINE."
                 </div>";
     }
 }
