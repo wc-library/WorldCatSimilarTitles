@@ -3,9 +3,13 @@
 namespace output;
 
 class FormatFactory {
-    public static function make($format) {
-        if ($format === 'xml') {
-            return new \output\Xml;
+    public static function make($outputFormat) {
+        if ($outputFormat === 'xml') {
+            $f = new \output\Xml;
+        } else if ($outputFormat === 'html') {
+            $f = new \output\Html;
         }
+
+        return $f;
     }
 }

@@ -9,6 +9,7 @@ require_once "autoloader.php";
         <link type="text/css" rel="stylesheet" href="css/normalize.css" />
         <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
         <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.min.css" />
+        <link type="text/css" rel="stylesheet" href="css/style.css" />
         <script type='text/javascript' src='js/jquery.js'></script>
     </head>
     <body>
@@ -40,6 +41,7 @@ require_once "autoloader.php";
   <label class="col-md-4 control-label" for="outputFormat">Output Format</label>
   <div class="col-md-4">
     <select id="outputFormat" name="outputFormat" class="form-control" required>
+      <option value="html">HTML</option>
       <option value="xml">XML</option>
     </select>
   </div>

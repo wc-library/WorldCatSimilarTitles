@@ -22,23 +22,25 @@ class WorldCatService {
         foreach ( \oclc\services\Catalog::batchQuery($idtype,$idlist,$params) as $id=>$result ) {
             $result = \util\Misc::objectToArray(json_decode($result));
             $query = array(
-                '@attributes' => array($idtype=>"$id"),
+                '@attributes' => array('idtype'=>$idtype),
+                'id'          => $id,
                 'title'       => $result['title'],
                 'author'      => $result['author'],
                 'publisher'   => $result['publisher'],
                 'date'        => $result['date'],
-                'related'     => array($idtype=>array()),
                 'OCLCnumber'  => $result['OCLCnumber'],
+                'url'         => "",
+                'related'     => array(),
             );
 
             foreach ($result[$idtype] as $relatedID) {
-                $query['related'][$idtype][] = $relatedID;
+                $query['related'][] = $relatedID;
             }
 
             if (isset($result['library'][0])) {
                 $libInfo = $result['library'][0];
                 if (isset($libInfo['opacUrl'])) {
-                    $query['opacUrl'] = $libInfo['opacUrl'];
+                    $query['url'] = $libInfo['opacUrl'];
                 }
 
                 if (isset($libInfo['institutionName']) && !isset($resultset['library']['institutionName'])) {

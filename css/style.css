@@ -1,21 +1,4 @@
-
-.block label {
-	display: inline-block;
-	float: left;
-	padding-top: 5px;
-	width: 140px;
-	text-align: right;
-}
-
-input {
-	margin-top: 5px;
-	margin-bottom: 5px;
-	display: inline-clock;
-	vertical-align:middle;
-	margin-left:20px;
-}
-
-form {
-	margin: 0 auto;
-	width:250px;
+ul {
+	list-style-type: none;
+	padding: 0;
 }

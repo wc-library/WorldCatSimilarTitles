@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-header("Content-type: text/xml");
 require_once 'autoloader.php';
 
 if (!isset($_POST['idlist'])) {
@@ -28,4 +22,4 @@ $list = array_unique($list, SORT_NUMERIC);
 
 $worldCat = new \oclc\WorldCatService();
 $resultset = $worldCat->batchLookup($idtype, $list);
-\output\FormatFactory::make('xml')->display('resultset',$resultset);
+\output\FormatFactory::make($outputFormat)->display('resultset',$resultset);
