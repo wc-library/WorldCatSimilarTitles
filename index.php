@@ -85,7 +85,9 @@ require_once "autoloader.php";
             }
 
             if (isset($_FILES['idlist_file'])) {
-                $idlist .= \util\Misc::cleanCSV(file_get_contents($_FILES['idlist_file']['name']));
+                $file = new \input\FileUpload('idlist_file');
+                $txt = $file->read();
+                $idlist .= \util\Misc::cleanCSV($txt);
             }
 
             if (isset($_POST['idtype'])) {
