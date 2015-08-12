@@ -35,7 +35,8 @@ class Html {
             </tbody>
             </table>
             </div>
-            <div class=\"col-md-4\"></div></div>";
+            <div class=\"col-md-4\"></div>
+            </div>";
 
         echo "<div class=\"row\">
             <div class=\"col-md-2\"></div>
@@ -47,7 +48,7 @@ class Html {
             "</table>
             </div>
             <div class=\"col-md-2\"></div>
-            </div></div>";
+            </div>";
         ?>
     </body>
 </html>

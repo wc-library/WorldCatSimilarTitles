@@ -34,6 +34,9 @@ class WorldCatService {
             );
 
             foreach ($result[$idtype] as $relatedID) {
+                if ($relatedID == $id) {
+                    continue;
+                }
                 $query['related'][] = $relatedID;
             }
 
@@ -57,7 +60,9 @@ class WorldCatService {
                 $query['library'] = 'Holding not found!';
             }
 
-            $resultset['query'][] = $query;
+            if (count($query['related'])) {
+                $resultset['query'][] = $query;
+            }
             ++$i;
         }
         return  $resultset;
