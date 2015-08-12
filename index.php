@@ -7,19 +7,19 @@ $html_header
     ->css("bootstrap.min.css")
     ->css("bootstrap-theme.min.css")
     ->css("style.css")
-    ->js('jquery.js');
+    ->js('jquery.min.js')
+    ->js('bootstrap.min.js');
 
 ?>
 <!DOCTYPE html>
 <html lang="en"><?php
     echo $html_header->html();
         ?>
-    <body>
+    <body><div class="container">
         <?php
 
 if (isset($_POST['submit'])) {
     $params = array();
-
 
     $idlist = "";
     if (isset($_POST['idlist_textarea'])) {
@@ -44,8 +44,8 @@ if (isset($_POST['submit'])) {
     $params['outputFormat'] = $outputFormat;
 
     if (trim($idlist)=="") {
-        $params['error'] = "Cannot submit without IDs!";
-        echo \html\Form::makeHiddenForm("CSVForm","",$params);
+        $params['errormsg'] = "Cannot submit without IDs!";
+        echo \html\Form::makeHiddenForm("CSVForm","index.php",$params);
     } else {
         $params = array(
             'idlist' => $idlist,
@@ -56,6 +56,9 @@ if (isset($_POST['submit'])) {
     }
  } else {
      $form = new \html\Form("WorldCat Similar Titles Search","");
+     if (isset($_POST['errormsg'])) {
+         $form->error($_POST['errormsg']);
+     }
      echo $form
          ->select('idtype','ID Type',true)
              ->option('oclc','OCLC Numbers')
@@ -72,5 +75,5 @@ if (isset($_POST['submit'])) {
  }
 
         ?>
-    </body>
+        </div></body>
 </html>

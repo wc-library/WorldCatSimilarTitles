@@ -11,6 +11,7 @@ final class Form {
 
     private $_prevSelect = FALSE;
 
+    private $_errors = array();
     private $_action;
     private $_enctype;
     private $_name;
@@ -39,7 +40,7 @@ final class Form {
     }
 
     public function error($msg) {
-
+        $this->_errors[] = $msg;
         return $this;
     }
 
@@ -94,6 +95,16 @@ final class Form {
     public function html() {
         $form = "<form class=\"$this->_class\" action=\"$this->_action\" method='post' enctype=\"$this->_enctype\">
             <legend>$this->_name</legend>";
+        if (count($this->_errors)>0) {
+            foreach ($this->_errors as $msg) {
+                $form .= "<div class='alert alert-danger' role='alert'>".self::EOF_LINE."
+                    <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".self::EOF_LINE."
+                        <strong>Error!</strong> $msg".self::EOF_LINE."
+                    </div>".self::EOF_LINE;
+            }
+        } else {
+            $form .= "<div class='row'></div>";
+        }
         foreach ($this->_input as $input) {
             $form .= $input;
         }
