@@ -14,13 +14,17 @@ class Header {
         . "</head>";
     }
 
-    public function css($fname) {
-        $this->includes[] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"css/$fname\" />";
+    public function css() {
+        foreach (func_get_args() as $fname) {
+            $this->includes[] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"css/$fname\" />";
+        }
         return $this;
     }
 
-    public function js($fname) {
-        $this->includes[] = "<script type='text/javascript' src='js/$fname'></script>";
+    public function js() {
+        foreach (func_get_args() as $fname) {
+            $this->includes[] = "<script type='text/javascript' src='js/$fname'></script>";
+        }
         return $this;
     }
 

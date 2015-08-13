@@ -1,4 +1,5 @@
 <?php
+
 /**
  * STable - Generate HTML Tables
  *
@@ -12,204 +13,140 @@
  *    - renamed to 'Table' and placed in namespace
  *    - removed some comments to shorten file
  *    - added caption method
- *    - renamed setter methods
  *    - removed a lot of attribute setters that should be left in css
+ *    - cleanup, performance tweaking
  */
 
 namespace html;
 
 final class Table {
 
-      /**
-       * Current node ID
-       *
-       * @var int $_node_id
-       */
-      private $_node_id = 0;
+    /**
+     * Current node ID
+     *
+     * @var int $_node_id
+     */
+    private $node_id = 0;
 
-      /**
-       * @var string $_table
-       */
-      private $_table;
+    /**
+     * @var string $_table
+     */
+    private $_table;
 
-      /**
-       * @var array $_thead
-       */
-      private $_thead = array();
+    /**
+     * @var array $_thead
+     */
+    private $_thead = array();
 
-      /**
-       * @var array $_tr
-       */
-      private $_tr = array();
+    /**
+     * @var array $_tr
+     */
+    private $_tr = array();
 
-      /**
-       * @var string $class
-       */
-      public $class;
+    /**
+     * @var string $class
+     */
+    private $class;
 
-      /**
-       * @var string $id
-       */
-      public $id;
+    /**
+     * @var string $id
+     */
+    private $id;
 
-      /**
-       * @param string $id
-       */
-      public function  __construct($id = null) {
-            // set table ID
-            $this->id = $id;
-      }
+    /**
+     * @param string $id
+     */
+    public function __construct($id = null) {
+        // set table ID
+        $this->id = $id?" id=\"$id\"":null;
+    }
 
-      /**
-       * @param string $class
-       */
-      private function formatClass($class) {
-            return $class ? " class=\"$class\"" : null;
-      }
+    /**
+     * @param string $class
+     */
+    private function formatClass($class) {
+        return $class ? " class=\"$class\"" : null;
+    }
 
-      /**
-       * Current node ID getter
-       *
-       * @return int
-       */
-      private function _getNodeId() {
-            // return node ID
-            return $this->_node_id;
-      }
+    public function setClass($class) {
+        $this->class = $class?" class=\"$class\"":null;
+        return $this;
+    }
 
-      /**
-       * Current node ID setter
-       */
-      private function _setNodeId() {
-            // increment new node ID
-            $this->_node_id++;
-      }
+    public function setCaption($text = null) {
+        $this->caption = $text;
+        return $this;
+    }
 
-      /**
-       * @return string
-       */
-      private function _getTbody() {
-            $html = null;
+    /**
+     * Table td setter
+     *
+     * @param mixed $text
+     * @param string $class
+     * @return Table
+     */
+    public function td($text = null, $class = null) {
+        // add td to current tr
+        $this->_tr[$this->node_id] .= "<td{$this->formatClass($class)}>$text</td>\n";
+        return $this;
+    }
 
-            // add tr(s)
-            foreach($this->_tr as $tr) {
-                  // add tr and close tr
-                  $html .= "{$tr}</tr>\n";
-            }
+    /**
+     * Table th setter
+     *
+     * @param mixed $text
+     * @param string $class
+     * @return Table
+     */
+    public function th($text = null, $class = null) {
+        // add th to current thead
+        $this->_thead[$this->node_id] .= "<th{$this->formatClass($class)}>$text</th>\n";
 
-            return $html;
-      }
+        return $this;
+    }
 
-      /**
-       * @return string
-       */
-      private function _getThead() {
-            $html = null;
+    /**
+     * Table thead setter
+     *
+     * @param string $class
+     * @return Table
+     */
+    public function thead($class = null) {
+        // set new node ID
+        $this->node_id++;
 
-            // add thead(s)
-            foreach($this->_thead as $thead) {
-                  // add thead and close thead
-                  $html .= "{$thead}</thead>\n";
-            }
+        // add thead
+        $this->_thead[$this->node_id] = "<thead{$this->formatClass($class)}>\n";
 
-            return $html;
-      }
+        return $this;
+    }
 
-      private function _getCaption() {
-          return "<caption>$this->_caption</caption>\n";
-      }
+    /**
+     * Table tr setter
+     *
+     * @param string $class
+     * @return Table
+     */
+    public function tr($class = null) {
+        // set new node ID
+        $this->node_id++;
 
-      public function setClass($class) {
-          $this->class = $class;
-          return $this;
-      }
+        // add tr
+        $this->_tr[$this->node_id] = "<tr{$this->formatClass($class)}>\n";
 
-      public function setCaption($text = null) {
-          $this->_caption = $text;
-          return $this;
-      }
+        return $this;
+    }
 
-      /**
-       * Table td setter
-       *
-       * @param mixed $text
-       * @param string $class
-       * @return Table
-       */
-      public function td($text = null, $class = null) {
-            // add td to current tr
-            $this->_tr[$this->_getNodeId()] .= "<td{$this->formatClass($class)}>"
-                  . "{$text}</td>\n";
+    /**
+     * @return string
+     */
+    public function html() {
+        // return table HTML
+        return "<table$this->id$this->class>\n
+            <caption>$this->caption</caption>\n
+            ".implode("</thead>",$this->_thead)."</thead>\n" // thead
+            .implode("</tr>\n",$this->_tr) . "</tr>\n" // tbody
+            ."</table>\n";
+    }
 
-            return $this;
-      }
-
-      /**
-       * Table th setter
-       *
-       * @param mixed $text
-       * @param string $class
-       * @return Table
-       */
-      public function th($text = null, $class = null) {
-            // add th to current thead
-            $this->_thead[$this->_getNodeId()] .= "<th{$this->formatClass($class)}>"
-                  . "{$text}</th>\n";
-
-            return $this;
-      }
-
-      /**
-       * Table thead setter
-       *
-       * @param string $class
-       * @return Table
-       */
-      public function thead($class = null) {
-            // set new node ID
-            $this->_setNodeId();
-
-            // add thead
-            $this->_thead[$this->_getNodeId()] = "<thead{$this->formatClass($class)}>"
-                  . PHP_EOL;
-
-            return $this;
-      }
-
-      /**
-       * Table tr setter
-       *
-       * @param string $class
-       * @return Table
-       */
-      public function tr($class = null) {
-            // set new node ID
-            $this->_setNodeId();
-
-            // add tr
-            $this->_tr[$this->_getNodeId()] = "<tr{$this->formatClass($class)}>"
-                  . PHP_EOL;
-
-            return $this;
-      }
-
-      /**
-       * @return string
-       */
-      public function html() {
-            // return table HTML
-            return "<table "
-                  // set ID if set, set class
-                  . ( $this->id ? " id=\"{$this->id}\"" : null )
-                  . $this->formatClass($this->class) . "\">" . PHP_EOL
-
-                  // add table caption, thead and tbody
-                  . $this->_getCaption() . $this->_getThead() . $this->_getTbody()
-
-                  // add table HTML
-                  . $this->_table
-
-                  // close table
-                  . "</table>\n";
-      }
 }

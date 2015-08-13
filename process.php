@@ -1,6 +1,7 @@
 <?php
-
 require_once 'autoloader.php';
+
+//\util\PHPProfiler::run();
 
 if (!isset($_POST['idlist'])) {
     header("location: index.php");

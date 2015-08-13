@@ -4,49 +4,45 @@ namespace html;
 
 final class Form {
 
-    private $_node_id = 0;
-    private $_input = array();
-    private $_class = "form-horizontal";
+    private $node_id = 0;
+    private $inputs = array();
+    private $class = "form-horizontal";
 
-    private $_prevSelect = FALSE;
+    private $prevSelect = FALSE;
 
-    private $_errors = array();
-    private $_action;
-    private $_enctype;
-    private $_name;
+    private $errors = array();
+    private $action;
+    private $enctype;
+    private $name;
 
     public function __construct($name,$action,$encType ='multipart/form-data') {
-        $this->_name = $name;
-        $this->_action = $action;
-        $this->_enctype = $encType;
+        $this->name = $name;
+        $this->action = $action;
+        $this->enctype = $encType;
     }
 
     public function setClass($class) {
-        $this->_class = $class;
+        $this->class = $class;
         return $this;
     }
 
-    private function getNodeId() {
-        return $this->_node_id;
-    }
-
     private function setNodeId() {
-        if ($this->getNodeId()===$this->_prevSelect['node']) {
-            $this->_prevSelect = FALSE;
-            $this->_input[$this->getNodeId()] .= "</select></div></div>";
+        if ($this->node_id===$this->prevSelect['node']) {
+            $this->prevSelect = FALSE;
+            $this->inputs[$this->node_id] .= "</select></div></div>";
         }
-        ++$this->_node_id;
+        ++$this->node_id;
     }
 
     public function error($msg) {
-        $this->_errors[] = $msg;
+        $this->errors[] = $msg;
         return $this;
     }
 
     public function select($name,$label,$required) {
         $this->setNodeId();
-        $this->_prevSelect = array('name'=>$name,'node'=>$this->getNodeId());
-        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">\n
+        $this->prevSelect = array('name'=>$name,'node'=>$this->node_id);
+        $this->inputs[$this->node_id] = "<div class=\"form-group\">\n
                 <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>\n
                 <div class=\"col-md-4\">\n
             <select id=\"$name\" name=\"$name\" class=\"form-control\""
@@ -56,18 +52,18 @@ final class Form {
 
     public function option($value,$txt) {
         $selected = "";
-       if ( isset($_POST[$this->_prevSelect['name']])
-           && $_POST[$this->_prevSelect['name']]===$value) {
+       if ( isset($_POST[$this->prevSelect['name']])
+           && $_POST[$this->prevSelect['name']]===$value) {
            $selected = "selected";
            }
 
-        $this->_input[$this->getNodeId()] .= "<option value=\"$value\" $selected>$txt</option>\n";
+        $this->inputs[$this->node_id] .= "<option value=\"$value\" $selected>$txt</option>\n";
         return $this;
     }
 
     public function file($name,$label) {
         $this->setNodeId();
-        $this->_input[$this->getNodeId()] = $this->inputBlock($name,$label,
+        $this->inputs[$this->node_id] = $this->inputBlock($name,$label,
             "<input class=\"input-file\"
                 id=\"$name\" name=\"$name\"  type=\"file\">");
         return $this;
@@ -75,7 +71,7 @@ final class Form {
 
     public function textarea($name,$label) {
         $this->setNodeId();
-        $this->_input[$this->getNodeId()] = $this->inputBlock($name,$label,
+        $this->inputs[$this->node_id] = $this->inputBlock($name,$label,
             "<textarea class=\"form-control\"
                 id=\"$name\" name=\"$name\"></textarea>");
         return $this;
@@ -83,7 +79,7 @@ final class Form {
 
     public function button($name,$label,$class) {
         $this->setNodeId();
-        $this->_input[$this->getNodeId()] =
+        $this->inputs[$this->node_id] =
             $this->inputBlock($name, "",
                 "<button class=\"$class\"
                     id=\"$name\"
@@ -92,10 +88,10 @@ final class Form {
     }
 
     public function html() {
-        $form = "<form class=\"$this->_class\" action=\"$this->_action\" method='post' enctype=\"$this->_enctype\">
-            <legend>$this->_name</legend>";
-        if (count($this->_errors)>0) {
-            foreach ($this->_errors as $msg) {
+        $form = "<form class=\"$this->class\" action=\"$this->action\" method='post' enctype=\"$this->enctype\">
+            <legend>$this->name</legend>";
+        if (count($this->errors)>0) {
+            foreach ($this->errors as $msg) {
                 $form .= "<div class='alert alert-danger' role='alert'>\n
                     <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>\n
                         <strong>Error!</strong> $msg\n
@@ -104,7 +100,7 @@ final class Form {
         } else {
             $form .= "<div class='row'></div>";
         }
-        foreach ($this->_input as $input) {
+        foreach ($this->inputs as $input) {
             $form .= $input;
         }
         return $form."</form>";

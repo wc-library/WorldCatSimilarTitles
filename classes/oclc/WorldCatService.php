@@ -20,7 +20,7 @@ class WorldCatService {
         );
         $i=0;
         foreach ( \oclc\services\Catalog::batchQuery($idtype,$idlist,$params) as $id=>$result ) {
-            $result = \util\Misc::objectToArray(json_decode($result));
+            $result = json_decode($result,true);
             $query = array(
                 '@attributes' => array('idtype'=>$idtype),
                 'id'          => $id,
