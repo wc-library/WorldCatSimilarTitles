@@ -20,8 +20,6 @@ namespace html;
 
 final class Table {
 
-      const EOF_LINE = "\n";
-
       /**
        * Current node ID
        *
@@ -96,7 +94,7 @@ final class Table {
             // add tr(s)
             foreach($this->_tr as $tr) {
                   // add tr and close tr
-                  $html .= "{$tr}</tr>" . self::EOF_LINE;
+                  $html .= "{$tr}</tr>\n";
             }
 
             return $html;
@@ -111,14 +109,14 @@ final class Table {
             // add thead(s)
             foreach($this->_thead as $thead) {
                   // add thead and close thead
-                  $html .= "{$thead}</thead>" . self::EOF_LINE;
+                  $html .= "{$thead}</thead>\n";
             }
 
             return $html;
       }
 
       private function _getCaption() {
-          return "<caption>$this->_caption</caption>" . self::EOF_LINE;
+          return "<caption>$this->_caption</caption>\n";
       }
 
       public function setClass($class) {
@@ -141,7 +139,7 @@ final class Table {
       public function td($text = null, $class = null) {
             // add td to current tr
             $this->_tr[$this->_getNodeId()] .= "<td{$this->formatClass($class)}>"
-                  . "{$text}</td>" . self::EOF_LINE;
+                  . "{$text}</td>\n";
 
             return $this;
       }
@@ -156,7 +154,7 @@ final class Table {
       public function th($text = null, $class = null) {
             // add th to current thead
             $this->_thead[$this->_getNodeId()] .= "<th{$this->formatClass($class)}>"
-                  . "{$text}</th>" . self::EOF_LINE;
+                  . "{$text}</th>\n";
 
             return $this;
       }
@@ -173,7 +171,7 @@ final class Table {
 
             // add thead
             $this->_thead[$this->_getNodeId()] = "<thead{$this->formatClass($class)}>"
-                  . self::EOF_LINE;
+                  . PHP_EOL;
 
             return $this;
       }
@@ -190,7 +188,7 @@ final class Table {
 
             // add tr
             $this->_tr[$this->_getNodeId()] = "<tr{$this->formatClass($class)}>"
-                  . self::EOF_LINE;
+                  . PHP_EOL;
 
             return $this;
       }
@@ -203,7 +201,7 @@ final class Table {
             return "<table "
                   // set ID if set, set class
                   . ( $this->id ? " id=\"{$this->id}\"" : null )
-                  . $this->formatClass($this->class) . "\">" . self::EOF_LINE
+                  . $this->formatClass($this->class) . "\">" . PHP_EOL
 
                   // add table caption, thead and tbody
                   . $this->_getCaption() . $this->_getThead() . $this->_getTbody()
@@ -212,6 +210,6 @@ final class Table {
                   . $this->_table
 
                   // close table
-                  . "</table>" . self::EOF_LINE;
+                  . "</table>\n";
       }
 }

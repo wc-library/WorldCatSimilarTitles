@@ -4,7 +4,6 @@ namespace html;
 
 final class Form {
 
-    const EOF_LINE = "\n";
     private $_node_id = 0;
     private $_input = array();
     private $_class = "form-horizontal";
@@ -47,11 +46,11 @@ final class Form {
     public function select($name,$label,$required) {
         $this->setNodeId();
         $this->_prevSelect = array('name'=>$name,'node'=>$this->getNodeId());
-        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">".self::EOF_LINE."
-                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>".self::EOF_LINE."
-                <div class=\"col-md-4\">".self::EOF_LINE."
+        $this->_input[$this->getNodeId()] = "<div class=\"form-group\">\n
+                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>\n
+                <div class=\"col-md-4\">\n
             <select id=\"$name\" name=\"$name\" class=\"form-control\""
-            . (($required)?'required':'') . ">".self::EOF_LINE;
+            . (($required)?'required':'') . ">\n";
         return $this;
     }
 
@@ -62,7 +61,7 @@ final class Form {
            $selected = "selected";
            }
 
-        $this->_input[$this->getNodeId()] .= "<option value=\"$value\" $selected>$txt</option>".self::EOF_LINE;
+        $this->_input[$this->getNodeId()] .= "<option value=\"$value\" $selected>$txt</option>\n";
         return $this;
     }
 
@@ -97,10 +96,10 @@ final class Form {
             <legend>$this->_name</legend>";
         if (count($this->_errors)>0) {
             foreach ($this->_errors as $msg) {
-                $form .= "<div class='alert alert-danger' role='alert'>".self::EOF_LINE."
-                    <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>".self::EOF_LINE."
-                        <strong>Error!</strong> $msg".self::EOF_LINE."
-                    </div>".self::EOF_LINE;
+                $form .= "<div class='alert alert-danger' role='alert'>\n
+                    <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>\n
+                        <strong>Error!</strong> $msg\n
+                    </div>\n";
             }
         } else {
             $form .= "<div class='row'></div>";
@@ -112,9 +111,9 @@ final class Form {
     }
 
     public static function makeHiddenForm($id,$action,$params) {
-        $form = "<form id='$id' action='$action' method='post'>".self::EOF_LINE;
+        $form = "<form id='$id' action='$action' method='post'>\n";
         foreach ($params as $name=>$value) {
-            $form .= "<input type=\"hidden\" name=\"$name\" value=\"$value\"></input>".self::EOF_LINE;
+            $form .= "<input type=\"hidden\" name=\"$name\" value=\"$value\"></input>\n";
         }
 
         $form .= "<script type='text/javascript'>
@@ -127,11 +126,11 @@ final class Form {
     }
 
     private function inputBlock($name,$label,$inputString) {
-        return "<div class=\"form-group\">".self::EOF_LINE."
-                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>".self::EOF_LINE."
-                <div class=\"col-md-4\">".self::EOF_LINE."
+        return "<div class=\"form-group\">\n
+                <label class=\"col-md-4 control-label\" for=\"$name\">$label</label>\n
+                <div class=\"col-md-4\">\n
                 $inputString
-                ".self::EOF_LINE."</div>".self::EOF_LINE."
+                \n</div>\n
                 </div>";
     }
 }
