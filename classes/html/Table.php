@@ -142,9 +142,9 @@ final class Table {
      */
     public function html() {
         // return table HTML
-        return "<table$this->id$this->class>\n
-            <caption>$this->caption</caption>\n
-            ".implode("</thead>",$this->_thead)."</thead>\n" // thead
+        return "<table$this->id$this->class>\n"
+            ."<caption>$this->caption</caption>\n"
+            .implode("</thead>",$this->_thead)."</thead>\n" // thead
             .implode("</tr>\n",$this->_tr) . "</tr>\n" // tbody
             ."</table>\n";
     }

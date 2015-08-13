@@ -7,11 +7,11 @@ class Header {
     protected $includes = array();
 
     public function html() {
-        return "<head lang=\"en\">
-            <meta content=\"text/html; charset=UTF-8\">
-        <title>$this->title</title>\n"
+        return "<head lang=\"en\">\n"
+        ."<meta content=\"text/html; charset=UTF-8\">\n"
+        ."<title>$this->title</title>\n"
         . implode("\n",$this->includes)
-        . "</head>";
+        . "\n</head>";
     }
 
     public function css() {
