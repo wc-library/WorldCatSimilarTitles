@@ -9,21 +9,19 @@ class Html {
         $this->libinfo = $data['library'];
 
         $html_header = new \html\Header;
-        $container = new \html\Container();
-            $lib_tbl = new \html\Table();
-            $res_tbl = new \html\Table();
-
+        $container = new \html\GridDiv('container');
+            $infobox = new \html\Panel("panel-info");
+            $libbox = new \html\Panel();
+                $lib_tbl = new \html\Table();
+            $resbox = new \html\Panel();
+                $res_tbl = new \html\Table();
 
         $html_header
             ->title("WorldCat Similar Titles")
-            ->css("normalize.css")
-            ->css("bootstrap.min.css")
-            ->css("bootstrap-theme.min.css")
-            ->js('jquery.min.js')
-            ->js('bootstrap.min.js');
+            ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css")
+            ->js('jquery.min.js','bootstrap.min.js');
 
         $lib_tbl->setClass("table table-condensed table-bordered")
-            ->setCaption("library info")
             ->tr()
                 ->td("<b>Institution Name</b>")
                 ->td($this->libinfo['institutionName'])
@@ -44,7 +42,6 @@ class Html {
                 ->td($this->libinfo['postalCode']);
 
         $res_tbl->setClass('table table-bordered table-hover table-condensed')
-                ->setCaption($title)
                 ->thead()
                 ->th("$this->idtype#")
                 ->th("Title")
@@ -69,17 +66,30 @@ class Html {
                 ->td(\implode("&nbsp;<br>",$query['related']));
         }
 
+        $infobox
+            ->heading('Info')
+            ->body("Rows highlighted in green indicate that a catalog url was found for the configured library.");
+
+        $libbox
+            ->heading("Library")
+            ->body($lib_tbl->html());
+
+        $resbox
+            ->heading($title)
+            ->body($res_tbl->html());
+
         echo "<!DOCTYPE html>\n<html>\n",
             $html_header->html(),
             "<body>\n",
                 $container
                     ->row()
                         ->column('',1)
-                        ->column($lib_tbl->html(),6)
+                        ->column($libbox->html(),6)
+                        ->column($infobox->html(),4)
                         ->column('',1)
                     ->row()
                         ->column('',1)
-                        ->column($res_tbl->html(),10)
+                        ->column($resbox->html(),10)
                         ->column('',1)
                     ->html(),
             "</body>\n</html>";

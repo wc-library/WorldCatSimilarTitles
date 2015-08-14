@@ -3,12 +3,8 @@ require_once "autoloader.php";
 $html_header = new \html\Header;
 $html_header
     ->title("WorldCat Similar Titles")
-    ->css("normalize.css")
-    ->css("bootstrap.min.css")
-    ->css("bootstrap-theme.min.css")
-    ->css("style.css")
-    ->js('jquery.min.js')
-    ->js('bootstrap.min.js');
+    ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css","style.css")
+    ->js('jquery.min.js','bootstrap.min.js');
 
 ?>
 <!DOCTYPE html>

@@ -23,4 +23,4 @@ $list = array_unique($list, SORT_NUMERIC);
 
 $worldCat = new \oclc\WorldCatService();
 $resultset = $worldCat->batchLookup($idtype, $list);
-\output\FormatFactory::make($outputFormat)->display('resultset',$resultset);
+\output\FormatFactory::make($outputFormat)->display('Results',$resultset);

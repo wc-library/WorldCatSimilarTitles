@@ -53,6 +53,8 @@ final class Table {
      */
     private $id;
 
+    private $caption = "";
+
     /**
      * @param string $id
      */
@@ -73,8 +75,8 @@ final class Table {
         return $this;
     }
 
-    public function setCaption($text = null) {
-        $this->caption = $text;
+    public function setCaption($text) {
+        $this->caption = "<caption>$text</caption>\n";
         return $this;
     }
 
@@ -142,11 +144,11 @@ final class Table {
      */
     public function html() {
         // return table HTML
-        return "<table$this->id$this->class>\n"
-            ."<caption>$this->caption</caption>\n"
+        return "<div>\n<table$this->id$this->class>\n"
+            .$this->caption
             .implode("</thead>",$this->_thead)."</thead>\n" // thead
             .implode("</tr>\n",$this->_tr) . "</tr>\n" // tbody
-            ."</table>\n";
+            ."</table>\n</div>\n";
     }
 
 }
