@@ -22,11 +22,8 @@ class GridDiv {
         return $this;
     }
 
-    public function column($data,$gridwidth=null,$class='') {
-        $gridwidth = ($gridwidth)?"col-md-$gridwidth ":"";
-        $class = ($gridwidth||$class)?" class=\"$gridwidth$class\"":'';
-
-        $this->rows[$this->currNode] .= "<div$class>$data</div>";
+    public function column($gridwidth,$class=null,$data=null) {
+        $this->rows[$this->currNode] .= "<div class=\"col-$gridwidth $class\">$data</div>";
         return $this;
     }
 

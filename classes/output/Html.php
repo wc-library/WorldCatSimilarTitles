@@ -9,19 +9,13 @@ class Html {
         $this->libinfo = $data['library'];
 
         $html_header = new \html\Header;
-        $container = new \html\GridDiv('container');
-            $infobox = new \html\Panel("panel-info");
-            $libbox = new \html\Panel();
-                $lib_tbl = new \html\Table();
-            $resbox = new \html\Panel();
-                $res_tbl = new \html\Table();
-
         $html_header
             ->title("WorldCat Similar Titles")
             ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css")
             ->js('jquery.min.js','bootstrap.min.js');
 
-        $lib_tbl->setClass("table table-condensed table-bordered")
+        $lib_tbl = new \html\Table("table table-condensed table-bordered");
+        $lib_tbl
             ->tr()
                 ->td("<b>Institution Name</b>")
                 ->td($this->libinfo['institutionName'])
@@ -41,7 +35,8 @@ class Html {
                 ->td("<b>Postal Code</b>")
                 ->td($this->libinfo['postalCode']);
 
-        $res_tbl->setClass('table table-bordered table-hover table-condensed')
+        $res_tbl = new \html\Table('table table-bordered table-hover table-condensed');
+        $res_tbl
                 ->thead()
                 ->th("$this->idtype#")
                 ->th("Title")
@@ -66,32 +61,33 @@ class Html {
                 ->td(\implode("&nbsp;<br>",$query['related']));
         }
 
-        $infobox
+        $info_panel = new \html\Panel("panel-info");
+        $info_panel
             ->heading('Info')
             ->body("Rows highlighted in green indicate that a catalog url was found for the configured library.");
 
-        $libbox
+        $lib_panel = new \html\Panel("panel-info");
+        $lib_panel
             ->heading("Library")
-            ->body($lib_tbl->html());
+            ->table($lib_tbl->html());
 
-        $resbox
+        $res_panel = new \html\Panel("panel-primary");
+        $res_panel
             ->heading($title)
-            ->body($res_tbl->html());
+            ->table($res_tbl->html());
+
+        $container = new \html\GridDiv('container');
+        $container
+                ->row()
+                    ->column('md-7',null,$lib_panel->html())
+                    ->column('md-5',null,$info_panel->html())
+                ->row()
+                    ->column('md-12',null,$res_panel->html());
 
         echo "<!DOCTYPE html>\n<html>\n",
             $html_header->html(),
             "<body>\n",
-                $container
-                    ->row()
-                        ->column('',1)
-                        ->column($libbox->html(),6)
-                        ->column($infobox->html(),4)
-                        ->column('',1)
-                    ->row()
-                        ->column('',1)
-                        ->column($resbox->html(),10)
-                        ->column('',1)
-                    ->html(),
+                $container->html(),
             "</body>\n</html>";
     }
 }

@@ -6,24 +6,18 @@ final class Form {
 
     private $node_id = 0;
     private $inputs = array();
-    private $class = "form-horizontal";
+    private $class;
 
     private $prevSelect = FALSE;
 
     private $errors = array();
     private $action;
     private $enctype;
-    private $name;
 
-    public function __construct($name,$action,$encType ='multipart/form-data') {
-        $this->name = $name;
+    public function __construct($gridwidth,$class,$action,$encType ='multipart/form-data') {
+        $this->class = "col-$gridwidth $class";
         $this->action = $action;
         $this->enctype = $encType;
-    }
-
-    public function setClass($class) {
-        $this->class = $class;
-        return $this;
     }
 
     private function setNodeId() {
@@ -88,8 +82,7 @@ final class Form {
     }
 
     public function html() {
-        $form = "<form class=\"$this->class\" action=\"$this->action\" method='post' enctype=\"$this->enctype\">
-            <legend>$this->name</legend>";
+        $form = "<form class=\"$this->class\" action=\"$this->action\" method='post' enctype=\"$this->enctype\">";
         if (count($this->errors)>0) {
             foreach ($this->errors as $msg) {
                 $form .= "<div class='alert alert-danger' role='alert'>\n

@@ -6,13 +6,10 @@ $html_header
     ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css","style.css")
     ->js('jquery.min.js','bootstrap.min.js');
 
-?>
-<!DOCTYPE html>
-<html lang="en"><?php
-    echo $html_header->html();
-        ?>
-    <body><div class="container">
-        <?php
+?><!DOCTYPE html>
+<html lang="en">
+<?php echo $html_header->html(); ?>
+<body><?php
 
 if (isset($_POST['submit'])) {
     $params = array();
@@ -50,26 +47,38 @@ if (isset($_POST['submit'])) {
             );
         echo \html\Form::makeHiddenForm("CSVForm","process.php",$params);
     }
- } else {
-     $form = new \html\Form("WorldCat Similar Titles Search","");
-     if (isset($_POST['errormsg'])) {
-         $form->error($_POST['errormsg']);
-     }
-     echo $form
-         ->select('idtype','ID Type',true)
-             ->option('oclc','OCLC Numbers')
-             ->option('isbn','ISBN Numbers')
-             ->option('issn','ISSN Numbers')
-             ->option('sn','Standard Numbers')
-         ->select('outputFormat','Output Format',true)
-             ->option('html','HTML')
-             ->option('xml','XML')
-         ->file('idlist_file','Import IDs (CSV or line breaks)')
-         ->textarea('idlist_textarea','ID List (CSV or line breaks)')
-         ->button('submit','Submit','btn btn-primary')
-         ->html();
- }
+} else {
+    $form = new \html\Form('md-10',"form-horizontal","");
+    if (isset($_POST['errormsg'])) {
+        $form->error($_POST['errormsg']);
+    }
+    $form
+        ->select('idtype','ID Type',true)
+            ->option('oclc','OCLC Numbers')
+            ->option('isbn','ISBN Numbers')
+            ->option('issn','ISSN Numbers')
+            ->option('sn','Standard Numbers')
+        ->select('outputFormat','Output Format',true)
+            ->option('html','HTML')
+            ->option('xml','XML')
+        ->file('idlist_file','Import IDs (CSV or line breaks)')
+        ->textarea('idlist_textarea','ID List (CSV or line breaks)')
+        ->button('submit','Submit','btn btn-primary');
 
-        ?>
-        </div></body>
+    $form_panel = new \html\Panel("panel-primary");
+    $form_panel
+        ->heading("WorldCat Similar Titles Search")
+        ->body($form->html());
+
+    $container = new \html\GridDiv("container");
+    $container
+        ->row()
+            ->column('md-1')
+            ->column('md-10',null,$form_panel->html())
+            ->column('md-1');
+
+    echo $container->html();
+}
+
+?></body>
 </html>

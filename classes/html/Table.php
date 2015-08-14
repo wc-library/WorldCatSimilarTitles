@@ -58,8 +58,8 @@ final class Table {
     /**
      * @param string $id
      */
-    public function __construct($id = null) {
-        // set table ID
+    public function __construct($class=null,$id = null) {
+        $this->class = $class?" class=\"$class\"":null;
         $this->id = $id?" id=\"$id\"":null;
     }
 
@@ -68,16 +68,6 @@ final class Table {
      */
     private function formatClass($class) {
         return $class ? " class=\"$class\"" : null;
-    }
-
-    public function setClass($class) {
-        $this->class = $class?" class=\"$class\"":null;
-        return $this;
-    }
-
-    public function setCaption($text) {
-        $this->caption = "<caption>$text</caption>\n";
-        return $this;
     }
 
     /**
@@ -144,11 +134,10 @@ final class Table {
      */
     public function html() {
         // return table HTML
-        return "<div>\n<table$this->id$this->class>\n"
-            .$this->caption
+        return "<table$this->id$this->class>\n"
             .implode("</thead>",$this->_thead)."</thead>\n" // thead
             .implode("</tr>\n",$this->_tr) . "</tr>\n" // tbody
-            ."</table>\n</div>\n";
+            ."</table>\n";
     }
 
 }

@@ -7,8 +7,8 @@ class Panel {
     private $class=null;
     private $html="";
 
-    public function __construct($class='',$id='') {
-        $this->class = $class?$class:"panel-default";
+    public function __construct($class,$id=null) {
+        $this->class = $class;
         if ($id) {
             $this->id=" id=\"$id\"";
         }
@@ -29,7 +29,7 @@ class Panel {
         return $this;
     }
 
-    public function addhtml($html) {
+    public function table($html) {
         $this->html .= $html;
         return $this;
     }
