@@ -38,34 +38,34 @@ class WorldCatService {
 
                 if ($result[$idtype] !== null && is_array($result[$idtype])) {
                     $query['related'] = $result[$idtype];
-                }
 
-                if(($key = array_search($id,$query['related'])) !== false) {
-                    unset($query['related'][$key]);
-                }
-
-                if (isset($result['library'][0])) {
-                    $libInfo = $result['library'][0];
-                    if (isset($libInfo['opacUrl'])) {
-                        $query['url'] = $libInfo['opacUrl'];
+                    if(($key = array_search($id,$query['related'])) !== false) {
+                        unset($query['related'][$key]);
                     }
 
-                    if (isset($libInfo['institutionName']) && !isset($resultset['library']['institutionName'])) {
-                        $resultset['library'] = array(
-                            'institutionName' => $libInfo['institutionName'],
-                            'oclcSymbol'      => $libInfo['oclcSymbol'],
-                            'city'            => $libInfo['city'],
-                            'state'           => $libInfo['state'],
-                            'country'         => $libInfo['country'],
-                            'postalCode'      => $libInfo['postalCode']
-                        );
-                    }
-                } else {
-                    $query['library'] = 'Holding not found!';
-                }
+                    if (isset($result['library'][0])) {
+                        $libInfo = $result['library'][0];
+                        if (isset($libInfo['opacUrl'])) {
+                            $query['url'] = $libInfo['opacUrl'];
+                        }
 
-                if (count($query['related'])) {
-                    $resultset['query'][] = $query;
+                        if (isset($libInfo['institutionName']) && !isset($resultset['library']['institutionName'])) {
+                            $resultset['library'] = array(
+                                'institutionName' => $libInfo['institutionName'],
+                                'oclcSymbol'      => $libInfo['oclcSymbol'],
+                                'city'            => $libInfo['city'],
+                                'state'           => $libInfo['state'],
+                                'country'         => $libInfo['country'],
+                                'postalCode'      => $libInfo['postalCode']
+                            );
+                        }
+                    } else {
+                        $query['library'] = 'Holding not found!';
+                    }
+
+                    if (count($query['related'])) {
+                        $resultset['query'][] = $query;
+                    }
                 }
             }
         }

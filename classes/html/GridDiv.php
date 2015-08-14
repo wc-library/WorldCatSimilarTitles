@@ -27,17 +27,11 @@ class GridDiv {
         return $this;
     }
 
-    protected function getRowHtml() {
-        $html = "";
+    public function html() {
         foreach ($this->rows as $i=>$txt) {
             $row_cls = " ".$this->rows_cls_data[$i];
-            $html .= "<div class=\"row$row_cls\">$txt</div>";
+            $this->html .= "<div class=\"row$row_cls\">$txt</div>";
         }
-        return $html;
-    }
-
-    public function html() {
-        $this->html .= $this->getRowHtml();
         return "$this->html</div>";
     }
 }

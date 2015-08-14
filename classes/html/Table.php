@@ -15,6 +15,8 @@
  *    - added caption method
  *    - removed a lot of attribute setters that should be left in css
  *    - cleanup, performance tweaking
+ *    - (08/14/15) class as it now stands only retains the basic algorithmic design of STable
+ *                 as it has been trimmed down considerably
  */
 
 namespace html;
@@ -27,11 +29,6 @@ final class Table {
      * @var int $_node_id
      */
     private $node_id = 0;
-
-    /**
-     * @var string $_table
-     */
-    private $_table;
 
     /**
      * @var array $_thead
@@ -53,21 +50,12 @@ final class Table {
      */
     private $id;
 
-    private $caption = "";
-
     /**
      * @param string $id
      */
     public function __construct($class=null,$id = null) {
         $this->class = $class?" class=\"$class\"":null;
         $this->id = $id?" id=\"$id\"":null;
-    }
-
-    /**
-     * @param string $class
-     */
-    private function formatClass($class) {
-        return $class ? " class=\"$class\"" : null;
     }
 
     /**
@@ -79,7 +67,7 @@ final class Table {
      */
     public function td($text = null, $class = null) {
         // add td to current tr
-        $this->_tr[$this->node_id] .= "<td{$this->formatClass($class)}>$text</td>\n";
+        $this->_tr[$this->node_id] .= "<td".($class?" class=\"$class\"":null).">$text</td>\n";
         return $this;
     }
 
@@ -92,7 +80,7 @@ final class Table {
      */
     public function th($text = null, $class = null) {
         // add th to current thead
-        $this->_thead[$this->node_id] .= "<th{$this->formatClass($class)}>$text</th>\n";
+        $this->_thead[$this->node_id] .= "<th".($class?" class=\"$class\"":null).">$text</th>\n";
 
         return $this;
     }
@@ -108,7 +96,7 @@ final class Table {
         $this->node_id++;
 
         // add thead
-        $this->_thead[$this->node_id] = "<thead{$this->formatClass($class)}>\n";
+        $this->_thead[$this->node_id] = "<thead".($class?" class=\"$class\"":null).">\n";
 
         return $this;
     }
@@ -124,7 +112,7 @@ final class Table {
         $this->node_id++;
 
         // add tr
-        $this->_tr[$this->node_id] = "<tr{$this->formatClass($class)}>\n";
+        $this->_tr[$this->node_id] = "<tr".($class?" class=\"$class\"":null).">\n";
 
         return $this;
     }
