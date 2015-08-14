@@ -77,7 +77,7 @@ class Html {
             ->heading($title)
             ->table($res_tbl->html());
 
-        $container = new \html\GridDiv('container');
+        $container = new \html\GridDiv('container-fluid');
         $container
                 ->row()
                     ->column('md-7',null,$lib_panel->html())

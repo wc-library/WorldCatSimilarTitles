@@ -55,9 +55,9 @@ if (isset($_POST['submit'])) {
     }
     $form
         ->select('idtype','ID Type',true)
-            ->option('oclc','OCLC Numbers')
             ->option('isbn','ISBN Numbers')
             ->option('issn','ISSN Numbers')
+            ->option('oclc','OCLC Numbers')
             ->option('sn','Standard Numbers')
         ->select('outputFormat','Output Format',true)
             ->option('html','HTML')
