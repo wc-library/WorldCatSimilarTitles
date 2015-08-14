@@ -33,16 +33,13 @@ class WorldCatService {
                     'date'        => $result['date'],
                     'OCLCnumber'  => $result['OCLCnumber'],
                     'url'         => "",
-                    'related'     => array(),
+                    'related'     => $result[$idtype],
                 );
 
-                foreach ($result[$idtype] as $relatedID) {
-                    if ($relatedID == $id) {
-                        continue;
-                    }
-                    $query['related'][] = $relatedID;
+                if(($key = array_search($id,$query['related'])) !== false) {
+                    unset($query['related'][$key]);
                 }
-
+                
                 if (isset($result['library'][0])) {
                     $libInfo = $result['library'][0];
                     if (isset($libInfo['opacUrl'])) {

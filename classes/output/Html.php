@@ -12,9 +12,10 @@ class Html {
         $html_header
             ->title("WorldCat Similar Titles")
             ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css")
+            ->css("style.css")
             ->js('jquery.min.js','bootstrap.min.js');
 
-        $lib_tbl = new \html\Table("table table-condensed table-bordered");
+        $lib_tbl = new \html\Table("table table-bordered table-condensed");
         $lib_tbl
             ->tr()
                 ->td("<b>Institution Name</b>")
