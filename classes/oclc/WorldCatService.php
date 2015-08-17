@@ -5,8 +5,6 @@ namespace oclc;
 class WorldCatService {
 
     public function batchLookup($idtype, array $idlist, $includeRelated=true) {
-        $idtype = strtoupper($idtype);
-
         $resultset = array(
             'library' => array(),
             'query' => array(),
@@ -24,7 +22,6 @@ class WorldCatService {
         if ($idtype !== 'OCLC') {
             $BASEURL .= "$idtype/";
         }
-
         $requests = array();
         foreach ($idlist as $id) {
             $requests[$id] =  "$BASEURL/$id?$PARAMS";

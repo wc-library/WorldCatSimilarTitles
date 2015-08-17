@@ -1,14 +1,14 @@
 <?php
 require_once 'autoloader.php';
 
-\util\PHPProfiler::run();
+//\util\PHPProfiler::run();
 
 if (!isset($_POST['idlist'])) {
     header("location: index.php");
 }
 
 $list = explode(',', $_POST['idlist']);
-$idtype = $_POST['idtype'];
+$idtype = strtoupper($_POST['idtype']);
 $outputFormat = $_POST['outputFormat'];
 
 $n = count($list);
