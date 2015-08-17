@@ -36,7 +36,7 @@ class WorldCatService {
                     'related'     => array(),
                 );
 
-                if ($result[$idtype] !== null && is_array($result[$idtype])) {
+                if (isset($result[$idtype]) && is_array($result[$idtype])) {
                     $query['related'] = $result[$idtype];
 
                     if(($key = array_search($id,$query['related'])) !== false) {
