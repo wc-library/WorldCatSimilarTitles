@@ -15,9 +15,9 @@ class Catalog {
 
         $requests = array();
         foreach ($idlist as $id) {
-            $requests[$id] =  \file_get_contents("$BASEURL/$id?$PARAMS");
+            $requests[$id] =  "$BASEURL/$id?$PARAMS";
         }
 
-        return $requests;
+        return \util\BatchRequest::make($requests)->exec();
     }
 }

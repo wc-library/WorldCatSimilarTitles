@@ -1,6 +1,6 @@
 <?php
 
-namespace input;
+namespace util;
 
 class FileUpload {
     protected $id;

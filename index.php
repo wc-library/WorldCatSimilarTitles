@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
         $parms['idlist_textarea'] = $_POST['idlist_textarea'];
     }
 
-    $file = new \input\FileUpload('idlist_file');
+    $file = new \util\FileUpload('idlist_file');
     if ( ($txt = $file->read()) !== FALSE) {
         $fdata = \util\Misc::cleanCSV($txt);
     }
