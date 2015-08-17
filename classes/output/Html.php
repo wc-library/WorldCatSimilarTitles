@@ -4,9 +4,9 @@ namespace output;
 
 class Html {
     public function display($title,$data) {
-        $this->idtype = $_POST['idtype'];
-        $this->results = $data['query'];
-        $this->libinfo = $data['library'];
+        $idtype = $_POST['idtype'];
+        $resultset = $data['query'];
+        $library = $data['library'];
 
         $html_header = new \html\Header;
         $html_header
@@ -18,34 +18,34 @@ class Html {
         $lib_tbl
             ->tr()
                 ->td("<b>Institution Name</b>")
-                ->td($this->libinfo['institutionName'])
+                ->td($library['institutionName'])
             ->tr()
                 ->td("<b>OCLC Symbol</b>")
-                ->td($this->libinfo['oclcSymbol'])
+                ->td($library['oclcSymbol'])
             ->tr()
                 ->td("<b>City</b>")
-                ->td($this->libinfo['city'])
+                ->td($library['city'])
             ->tr()
                 ->td("<b>State</b>")
-                ->td($this->libinfo['state'])
+                ->td($library['state'])
             ->tr()
                 ->td("<b>Country</b>")
-                ->td($this->libinfo['country'])
+                ->td($library['country'])
             ->tr()
                 ->td("<b>Postal Code</b>")
-                ->td($this->libinfo['postalCode']);
+                ->td($library['postalCode']);
 
         $res_tbl = new \html\Table('table table-bordered table-hover table-condensed');
         $res_tbl
                 ->thead()
-                ->th("$this->idtype#")
+                ->th("$idtype#")
                 ->th("Title")
                 ->th("Author")
                 ->th("Publisher")
                 ->th("Date")
-                ->th("Related $this->idtype#s");
+                ->th("Related $idtype#s");
 
-        foreach ($this->results as $query) {
+        foreach ($resultset as $query) {
             $id = $id = $query['id'];
             $rowcls = null;
             if ($query['url']) {

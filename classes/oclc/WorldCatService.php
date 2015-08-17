@@ -5,25 +5,35 @@ namespace oclc;
 class WorldCatService {
 
     public function batchLookup($idtype, array $idlist, $includeRelated=true) {
-        $failed_lookups = array();
         $idtype = strtoupper($idtype);
-        $params = array(
+
+        $resultset = array(
+            'library' => array(),
+            'query' => array(),
+            'error' => array()
+        );
+
+        $BASEURL = "http://www.worldcat.org/webservices/catalog/content/libraries/";
+        $PARAMS = \http_build_query(array(
             'oclcsymbol'=>\util\Config::$library->oclcsymbol,
             'wskey' => \util\Config::$library->wskey,
             'servicelevel' => 'full',
             'format' => 'json',
             'frbrGrouping' => ($includeRelated)?'on':'off'
-        );
+        ));
+        if ($idtype !== 'OCLC') {
+            $BASEURL .= "$idtype/";
+        }
 
-        $resultset = array(
-            'library' => array(),
-            'query' => array()
-        );
+        $requests = array();
+        foreach ($idlist as $id) {
+            $requests[$id] =  "$BASEURL/$id?$PARAMS";
+        }
 
-        foreach ( \oclc\services\Catalog::batchQuery($idtype,$idlist,$params) as $id=>$result ) {
+        foreach ( \util\BatchRequest::make($requests)->exec() as $id=>$result ) {
             $result = json_decode($result,true);
             if (isset($result["diagnostic"])) {
-                $failed_lookups[] = $id;
+                $resultset['error'][] = $id;
             } else {
                 $query = array(
                     '@attributes' => array('idtype'=>$idtype),
@@ -71,8 +81,8 @@ class WorldCatService {
             }
         }
 
-        if (count($failed_lookups)) {
-            error_log("$idtype search failed for ID#s: " . implode(", ",$failed_lookups));
+        if (count($resultset['error'])) {
+            error_log("$idtype search failed for ID#s: " . implode(", ",$resultset['error']));
         }
 
         return  $resultset;
