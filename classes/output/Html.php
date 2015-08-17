@@ -11,8 +11,7 @@ class Html {
         $html_header = new \html\Header;
         $html_header
             ->title("WorldCat Similar Titles")
-            ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css")
-            ->css("style.css")
+            ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css","style.css")
             ->js('jquery.min.js','bootstrap.min.js');
 
         $lib_tbl = new \html\Table("table table-bordered table-condensed");

@@ -20,28 +20,14 @@ class BatchRequest {
         );
 
         foreach ($requests as $id => $url) {
-            if ( ($batch->ch[$id]=\curl_init()) === FALSE) {
-                error_log("curl_init failed");
-                return FALSE;
-            } else if (\curl_setopt_array($batch->ch[$id], $options) === FALSE) {
-                error_log("failed to set one or more cURL options!");
-                return FALSE;
-            } else if (\curl_setopt($batch->ch[$id], \CURLOPT_URL, $url) === FALSE) {
-                error_log("failed to set CURLOPT_URL");
-                return FALSE;
-            }
+            $batch->ch[$id]=\curl_init();
+            \curl_setopt_array($batch->ch[$id], $options);
+            \curl_setopt($batch->ch[$id], \CURLOPT_URL, $url);
         }
 
-        if ( ($batch->mh=\curl_multi_init()) === FALSE) {
-            error_log("curl_multi_init failed");
-            return FALSE;
-        } else {
-            foreach ($batch->ch as $ch) {
-                if (\curl_multi_add_handle($batch->mh, $ch) !== \CURLE_OK) {
-                    error_log("{".curl_errno($ch)."} ".curl_error($ch));
-                    return FALSE;
-                }
-            }
+        $batch->mh=\curl_multi_init();
+        foreach ($batch->ch as $ch) {
+            \curl_multi_add_handle($batch->mh, $ch);
         }
 
         return $batch;

@@ -17,20 +17,19 @@ if (isset($_POST['submit'])) {
 
     $idlist = "";
     if (isset($_POST['idlist_textarea'])) {
-        $txtdata =\util\Misc::cleanCSV($_POST['idlist_textarea']);
+        $idlist = \util\Misc::cleanCSV($_POST['idlist_textarea']);
         $parms['idlist_textarea'] = $_POST['idlist_textarea'];
     }
 
     $file = new \util\FileUpload('idlist_file');
     if ( ($txt = $file->read()) !== FALSE) {
-        $fdata = \util\Misc::cleanCSV($txt);
+        if ($idlist) {
+            $idlist .= ", ".\util\Misc::cleanCSV($txt);
+        } else {
+            $idlist = \util\Misc::cleanCSV($txt);
+        }
     }
-
-    if (isset($txtdata,$fdata)) {
-        $idlist .= "$txtdata, $fdata";
-    }
-
-
+    
     $idtype = $_POST['idtype'];
     $outputFormat = $_POST['outputFormat'];
 

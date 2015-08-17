@@ -5,6 +5,7 @@ namespace oclc;
 class WorldCatService {
 
     public function batchLookup($idtype, array $idlist, $includeRelated=true) {
+        $failed_lookups = array();
         $idtype = strtoupper($idtype);
         $params = array(
             'oclcsymbol'=>\util\Config::$library->oclcsymbol,
@@ -22,7 +23,7 @@ class WorldCatService {
         foreach ( \oclc\services\Catalog::batchQuery($idtype,$idlist,$params) as $id=>$result ) {
             $result = json_decode($result,true);
             if (isset($result["diagnostic"])) {
-                error_log("Catalog search failed for $idtype/$id");
+                $failed_lookups[] = $id;
             } else {
                 $query = array(
                     '@attributes' => array('idtype'=>$idtype),
@@ -69,6 +70,11 @@ class WorldCatService {
                 }
             }
         }
+
+        if (count($failed_lookups)) {
+            error_log("$idtype search failed for ID#s: " . implode(", ",$failed_lookups));
+        }
+
         return  $resultset;
     }
 
