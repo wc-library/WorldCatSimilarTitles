@@ -58,8 +58,8 @@ class Html {
                 ->td($query['title'])
                 ->td($query['author'])
                 ->td($query['publisher'])
-                ->td($query['date'])
-                ->td(\implode("&nbsp;<br>",$query['related']));
+                ->td($query['date']);
+            $res_tbl->td(\implode("&nbsp;<br>",$query['related']));
         }
 
         $info_panel = new \html\Panel("panel-info");
@@ -70,12 +70,12 @@ class Html {
         $lib_panel = new \html\Panel("panel-info");
         $lib_panel
             ->heading("Library")
-            ->table($lib_tbl->html());
+            ->table("<div class='table-responsive'>".$lib_tbl->html()."</div>");
 
         $res_panel = new \html\Panel("panel-primary");
         $res_panel
             ->heading($title)
-            ->table($res_tbl->html());
+            ->table("<div class='table-responsive'>".$res_tbl->html()."</div>");
 
         $container = new \html\GridDiv('container-fluid');
         $container
