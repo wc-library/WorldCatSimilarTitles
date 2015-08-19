@@ -8,7 +8,8 @@ class WorldCatService {
         $resultset = array(
             'library' => array(),
             'query' => array(),
-            'error' => array()
+            'error' => array(),
+            'errormsg' => null
         );
 
         $BASEURL = "http://www.worldcat.org/webservices/catalog/content/libraries/";
@@ -79,7 +80,7 @@ class WorldCatService {
         }
 
         if (count($resultset['error'])) {
-            error_log("$idtype search failed for ID#s: " . implode(", ",$resultset['error']));
+            $resultset['errormsg'] = "$idtype search failed for ID#s: " . implode(", ",$resultset['error']);
         }
 
         return  $resultset;

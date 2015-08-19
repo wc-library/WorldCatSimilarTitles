@@ -7,6 +7,7 @@ class Html {
         $idtype = $_POST['idtype'];
         $resultset = $data['query'];
         $library = $data['library'];
+        $searchErrors = $data['errormsg'];
 
         $html_header = new \html\Header;
         $html_header
@@ -25,6 +26,9 @@ class Html {
 
         $info_panel = new \html\TextPanel('Info',"info-panel");
         $info_panel->setText("Rows highlighted in green indicate that a catalog url was found for the configured library.");
+
+        $error_panel = new \html\TextPanel('Error','error-panel');
+        $error_panel->setText($searchErrors);
 
         $res_panel = new \html\TablePanel($title,"results-panel");
         $res_panel->addheader(array("$idtype#","Title","Author","Publisher","Date","Related $idtype#s"));
@@ -55,9 +59,17 @@ class Html {
             ->row()
                 ->column('md-12',null,$breadcrumbs)
             ->row()
-                ->column('md-7',null,$lib_panel->html())
-                ->column('md-5',null,$info_panel->html())
-            ->row()
+                ->column('md-12',null,$lib_panel->html())
+            ->row();
+
+        if ($searchErrors) {
+            $container
+                ->column('md-6',null,$info_panel->html())
+                ->column('md-6',null,$error_panel->html());
+        } else {
+            $container->column('md-12',null,$info_panel->html());
+        }
+        $container->row()
                 ->column('md-12',null,$res_panel->html());
 
         echo "<!DOCTYPE html>\n<html>\n",
