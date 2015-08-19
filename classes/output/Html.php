@@ -14,7 +14,7 @@ class Html {
             ->css("style.css")
             ->js('jquery.min.js','bootstrap.min.js');
 
-        $lib_tbl = \html\Table::fromArray("table table-bordered table-condensed",null,array(
+        $lib_panel = \html\TablePanel::fromArray("Library","library-panel",array(
             array("<b>Institution Name</b>",$library['institutionName']),
             array("<b>OCLC Symbol</b>",$library['oclcSymbol']),
             array("<b>City</b>",$library['city']),
@@ -23,9 +23,11 @@ class Html {
             array("<b>Postal Code</b>",$library['postalCode'])
         ));
 
-        $res_tbl = new \html\Table('table table-bordered table-hover table-condensed');
-        $res_tbl->addheader(array("$idtype#","Title","Author","Publisher","Date","Related $idtype#s"));
+        $info_panel = new \html\TextPanel('Info',"info-panel");
+        $info_panel->setText("Rows highlighted in green indicate that a catalog url was found for the configured library.");
 
+        $res_panel = new \html\TablePanel($title,"results-panel");
+        $res_panel->addheader(array("$idtype#","Title","Author","Publisher","Date","Related $idtype#s"));
         foreach ($resultset as $query) {
             $id = $query['id'];
             $rowcls = null;
@@ -33,7 +35,7 @@ class Html {
                 $id = "<a href=\"{$query['url']}\" target=\"_blank\">$id</a>";
                 $rowcls = "success";
             }
-            $res_tbl->addrow($rowcls,array(
+            $res_panel->addrow($rowcls,array(
                 $id,
                 $query['title'],
                 $query['author'],
@@ -42,21 +44,6 @@ class Html {
                 \implode("&nbsp;<br>",$query['related'])
             ));
         }
-
-        $info_panel = new \html\Panel("panel-info");
-        $info_panel
-            ->heading('Info')
-            ->body("Rows highlighted in green indicate that a catalog url was found for the configured library.");
-
-        $lib_panel = new \html\Panel("panel-info");
-        $lib_panel
-            ->heading("Library")
-            ->table("<div class='table-responsive'>".$lib_tbl->html()."</div>");
-
-        $res_panel = new \html\Panel("panel-primary");
-        $res_panel
-            ->heading($title)
-            ->table("<div class='table-responsive'>".$res_tbl->html()."</div>");
 
         $container = new \html\GridDiv('container-fluid');
         $container

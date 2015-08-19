@@ -3,38 +3,16 @@
 namespace html;
 
 class Panel {
-    private $id="";
-    private $class=null;
-    private $html="";
+    protected $id="";
+    protected $label="";
+    protected $html = "";
 
-    public function __construct($class,$id=null) {
-        $this->class = $class;
-        if ($id) {
-            $this->id=" id=\"$id\"";
-        }
-    }
-
-    public function heading($html) {
-        $this->html .= "<div class=\"panel-heading\">$html</div>";
-        return $this;
-    }
-
-    public function body($html) {
-        $this->html .= "<div class=\"panel-body\">$html</div>";
-        return $this;
-    }
-
-    public function footer($html) {
-        $this->html .= "<div class=\"panel-footer\">$html</div>";
-        return $this;
-    }
-
-    public function table($html) {
-        $this->html .= $html;
-        return $this;
+    public function __construct($label,$id) {
+        $this->label = "<div class=\"panel-heading\">$label</div>";
+        $this->id=" id=\"$id\"";
     }
 
     public function html() {
-        return "<div$this->id class=\"panel $this->class\">$this->html</div>";
+        return "<div$this->id>$this->label$this->html</div>";
     }
 }

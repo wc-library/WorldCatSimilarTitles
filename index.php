@@ -37,17 +37,17 @@ if (isset($_POST['submit'])) {
 
     if (trim($idlist)=="") {
         $params['errormsg'] = "Cannot submit without IDs!";
-        echo \html\Form::makeHiddenForm("CSVForm","index.php",$params);
+        echo \html\FormPanel::makeHiddenForm("CSVForm","index.php",$params);
     } else {
         $params = array(
             'idlist' => $idlist,
             'idtype' => $idtype,
             'outputFormat' => $outputFormat
             );
-        echo \html\Form::makeHiddenForm("CSVForm","process.php",$params);
+        echo \html\FormPanel::makeHiddenForm("CSVForm","process.php",$params);
     }
 } else {
-    $form = new \html\Form('md-10',"form-horizontal","");
+    $form = new \html\FormPanel("WorldCat Similar Titles Search","form-panel",'md-10',"form-horizontal","");
     if (isset($_POST['errormsg'])) {
         $form->error($_POST['errormsg']);
     }
@@ -64,16 +64,11 @@ if (isset($_POST['submit'])) {
         ->textarea('idlist_textarea','ID List (CSV or line breaks)')
         ->button('submit','Submit','btn btn-primary');
 
-    $form_panel = new \html\Panel("panel-primary");
-    $form_panel
-        ->heading("WorldCat Similar Titles Search")
-        ->body($form->html());
-
     $container = new \html\GridDiv("container");
     $container
         ->row()
             ->column('md-1')
-            ->column('md-10',null,$form_panel->html())
+            ->column('md-10',null,$form->html())
             ->column('md-1');
 
     echo $container->html();

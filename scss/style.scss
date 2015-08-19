@@ -2,19 +2,44 @@
 @import "src/bootstrap.min.scss";
 @import "src/bootstrap-theme.min.scss";
 
-.worldcat-similar-titles-table {
+.wcst-table {
 	@extend .table;
 	@extend .table-bordered;
 	@extend .table-condensed;
 }
 
-#result-tbl {
-	@extend .worldcat-similar-titles-table;
-	@extend .table-hover;
-	table-layout: fixed;
-	width:100%;
+#info-panel {
+	@extend .panel;
+	@extend .panel-info;
 }
 
-#lib-tbl {
-	@extend .worldcat-similar-titles-table;
+#error-panel {
+	@extend .panel;
+	@extend .panel-danger;
+}
+
+#library-panel {
+	@extend .panel;
+	@extend .panel-info;
+
+	.table-responsive table  {
+		@extend .wcst-table;
+	}
+}
+
+#results-panel {
+	@extend .panel;
+	@extend .panel-primary;
+
+	.table-responsive table {
+		@extend .wcst-table;
+		@extend .table-hover;
+		table-layout: fixed;
+		width:100%;
+	}
+}
+
+#form-panel {
+	@extend .panel;
+	@extend .panel-primary;
 }

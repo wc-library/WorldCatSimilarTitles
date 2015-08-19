@@ -2,7 +2,7 @@
 
 namespace html;
 
-final class Form {
+final class FormPanel extends \html\Panel{
 
     private $node_id = 0;
     private $inputs = array();
@@ -14,7 +14,8 @@ final class Form {
     private $action;
     private $enctype;
 
-    public function __construct($gridwidth,$class,$action,$encType ='multipart/form-data') {
+    public function __construct($label,$id,$gridwidth,$class,$action,$encType ='multipart/form-data') {
+        parent::__construct($label, $id);
         $this->class = "col-$gridwidth $class";
         $this->action = $action;
         $this->enctype = $encType;
@@ -82,21 +83,21 @@ final class Form {
     }
 
     public function html() {
-        $form = "<form class=\"$this->class\" action=\"$this->action\" method='post' enctype=\"$this->enctype\">";
+        $this->html .= "<div$this->id>$this->label<div class=\"panel-body\"><form class=\"$this->class\" action=\"$this->action\" method='post' enctype=\"$this->enctype\">";
         if (count($this->errors)>0) {
             foreach ($this->errors as $msg) {
-                $form .= "<div class='alert alert-danger' role='alert'>\n
+                $this->html .= "<div class='alert alert-danger' role='alert'>\n
                     <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>\n
                         <strong>Error!</strong> $msg\n
                     </div>\n";
             }
         } else {
-            $form .= "<div class='row'></div>";
+            $this->html .= "<div class='row'></div>";
         }
         foreach ($this->inputs as $input) {
-            $form .= $input;
+            $this->html .= $input;
         }
-        return $form."</form>";
+        return $this->html."</form></div></div>";
     }
 
     public static function makeHiddenForm($id,$action,$params) {
