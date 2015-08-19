@@ -45,13 +45,20 @@ class Html {
             ));
         }
 
+        $breadcrumbs = \html\Breadcrumb::make(array(
+            array('index.php','Index'),
+            array('process.php','Results')
+        ));
+
         $container = new \html\GridDiv('container-fluid');
         $container
-                ->row()
-                    ->column('md-7',null,$lib_panel->html())
-                    ->column('md-5',null,$info_panel->html())
-                ->row()
-                    ->column('md-12',null,$res_panel->html());
+            ->row()
+                ->column('md-12',null,$breadcrumbs)
+            ->row()
+                ->column('md-7',null,$lib_panel->html())
+                ->column('md-5',null,$info_panel->html())
+            ->row()
+                ->column('md-12',null,$res_panel->html());
 
         echo "<!DOCTYPE html>\n<html>\n",
             $html_header->html(),
