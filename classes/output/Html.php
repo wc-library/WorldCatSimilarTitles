@@ -14,51 +14,33 @@ class Html {
             ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css","style.css")
             ->js('jquery.min.js','bootstrap.min.js');
 
-        $lib_tbl = new \html\Table("table table-bordered table-condensed");
-        $lib_tbl
-            ->tr()
-                ->td("<b>Institution Name</b>")
-                ->td($library['institutionName'])
-            ->tr()
-                ->td("<b>OCLC Symbol</b>")
-                ->td($library['oclcSymbol'])
-            ->tr()
-                ->td("<b>City</b>")
-                ->td($library['city'])
-            ->tr()
-                ->td("<b>State</b>")
-                ->td($library['state'])
-            ->tr()
-                ->td("<b>Country</b>")
-                ->td($library['country'])
-            ->tr()
-                ->td("<b>Postal Code</b>")
-                ->td($library['postalCode']);
+        $lib_tbl = \html\Table::fromArray("table table-bordered table-condensed",null,array(
+            array("<b>Institution Name</b>",$library['institutionName']),
+            array("<b>OCLC Symbol</b>",$library['oclcSymbol']),
+            array("<b>City</b>",$library['city']),
+            array("<b>State</b>",$library['state']),
+            array("<b>Country</b>",$library['country']),
+            array("<b>Postal Code</b>",$library['postalCode'])
+        ));
 
         $res_tbl = new \html\Table('table table-bordered table-hover table-condensed');
-        $res_tbl
-                ->thead()
-                ->th("$idtype#")
-                ->th("Title")
-                ->th("Author")
-                ->th("Publisher")
-                ->th("Date")
-                ->th("Related $idtype#s");
+        $res_tbl->addheader(array("$idtype#","Title","Author","Publisher","Date","Related $idtype#s"));
 
         foreach ($resultset as $query) {
-            $id = $id = $query['id'];
+            $id = $query['id'];
             $rowcls = null;
             if ($query['url']) {
                 $id = "<a href=\"{$query['url']}\" target=\"_blank\">$id</a>";
                 $rowcls = "success";
             }
-            $res_tbl->tr($rowcls)
-                ->td($id)
-                ->td($query['title'])
-                ->td($query['author'])
-                ->td($query['publisher'])
-                ->td($query['date']);
-            $res_tbl->td(\implode("&nbsp;<br>",$query['related']));
+            $res_tbl->addrow($rowcls,array(
+                $id,
+                $query['title'],
+                $query['author'],
+                $query['publisher'],
+                $query['date'],
+                \implode("&nbsp;<br>",$query['related'])
+            ));
         }
 
         $info_panel = new \html\Panel("panel-info");

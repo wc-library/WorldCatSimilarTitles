@@ -1,44 +1,13 @@
 <?php
 
-/**
- * STable - Generate HTML Tables
- *
- * @package STable
- * @category STable
- * @name STable
- * @version 1.0
- * @author Shay Anderson 03.11
- *
- * modified by Brandon Garcia
- *    - renamed to 'Table' and placed in namespace
- *    - removed some comments to shorten file
- *    - added caption method
- *    - removed a lot of attribute setters that should be left in css
- *    - cleanup, performance tweaking
- *    - (08/14/15) class as it now stands only retains the basic algorithmic design of STable
- *                 as it has been trimmed down considerably
- */
-
 namespace html;
 
 final class Table {
 
     /**
-     * Current node ID
-     *
-     * @var int $_node_id
-     */
-    private $node_id = 0;
-
-    /**
-     * @var array $_thead
-     */
-    private $_thead = array();
-
-    /**
      * @var array $_tr
      */
-    private $_tr = array();
+    private $rows;
 
     /**
      * @var string $class
@@ -50,6 +19,8 @@ final class Table {
      */
     private $id;
 
+    private $thead;
+
     /**
      * @param string $id
      */
@@ -58,61 +29,44 @@ final class Table {
         $this->id = $id?" id=\"$id\"":null;
     }
 
-    /**
-     * Table td setter
-     *
-     * @param mixed $text
-     * @param string $class
-     * @return Table
-     */
-    public function td($text = null, $class = null) {
-        // add td to current tr
-        $this->_tr[$this->node_id] .= "<td".($class?" class=\"$class\"":null).">$text</td>\n";
-        return $this;
+    public static function fromArray($class=null,$id=null,array $rows) {
+        $tbl = new Table;
+        $tbl->class = $class?" class=\"$class\"":null;
+        $tbl->id = $id?" id=\"$id\"":null;
+
+        foreach ($rows as $row) {
+            $tbl->rows .= "<tr>";
+            if (count($row)) {
+                $tbl->rows .= "<td>".implode("</td><td>",$row)."</td>";
+            }
+            $tbl->rows .= "</tr>\n";
+        }
+
+        return $tbl;
     }
 
-    /**
-     * Table th setter
-     *
-     * @param mixed $text
-     * @param string $class
-     * @return Table
-     */
-    public function th($text = null, $class = null) {
-        // add th to current thead
-        $this->_thead[$this->node_id] .= "<th".($class?" class=\"$class\"":null).">$text</th>\n";
-
-        return $this;
-    }
-
-    /**
-     * Table thead setter
-     *
-     * @param string $class
-     * @return Table
-     */
-    public function thead($class = null) {
-        // set new node ID
-        $this->node_id++;
-
+    public function addheader($colnames) {
         // add thead
-        $this->_thead[$this->node_id] = "<thead".($class?" class=\"$class\"":null).">\n";
+        $this->thead = "<thead>\n<th>".implode("</th><th>",$colnames)."</th>\n</thead>";
+    }
 
+    public function addrow($class,$data) {
+        if ($class) {
+            $this->rows .= "<tr class=\"$class\"><td>".implode("</td><td>",$data)."</td></tr>\n";
+        } else {
+            $this->rows .= "<tr><td>".implode("</td><td>",$data)."</td></tr>\n";
+        }
         return $this;
     }
 
-    /**
-     * Table tr setter
-     *
-     * @param string $class
-     * @return Table
-     */
-    public function tr($class = null) {
-        // set new node ID
-        $this->node_id++;
-
-        // add tr
-        $this->_tr[$this->node_id] = "<tr".($class?" class=\"$class\"":null).">\n";
+    public function quickInsertRows($rows) {
+        foreach ($rows as $row) {
+            $this->rows .= "<tr>";
+            if (count($row)) {
+                $this->rows .= "<td>".implode("</td><td>",$row)."</td>";
+            }
+            $this->rows .= "</tr>\n";
+        }
 
         return $this;
     }
@@ -123,8 +77,8 @@ final class Table {
     public function html() {
         // return table HTML
         return "<table$this->id$this->class>\n"
-            .implode("</thead>",$this->_thead)."</thead>\n" // thead
-            .implode("</tr>\n",$this->_tr) . "</tr>\n" // tbody
+            .$this->thead."\n" // thead
+            .$this->rows // tbody
             ."</table>\n";
     }
 
