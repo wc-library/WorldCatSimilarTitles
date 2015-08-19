@@ -1,0 +1,20 @@
+@import "src/normalize.scss";
+@import "src/bootstrap.min.scss";
+@import "src/bootstrap-theme.min.scss";
+
+.worldcat-similar-titles-table {
+	@extend .table;
+	@extend .table-bordered;
+	@extend .table-condensed;
+}
+
+#result-tbl {
+	@extend .worldcat-similar-titles-table;
+	@extend .table-hover;
+	table-layout: fixed;
+	width:100%;
+}
+
+#lib-tbl {
+	@extend .worldcat-similar-titles-table;
+}

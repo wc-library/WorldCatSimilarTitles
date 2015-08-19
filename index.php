@@ -3,7 +3,6 @@ require_once "autoloader.php";
 $html_header = new \html\Header;
 $html_header
     ->title("WorldCat Similar Titles")
-    ->css("normalize.css","bootstrap.min.css","bootstrap-theme.min.css")
     ->css("style.css")
     ->js('jquery.min.js','bootstrap.min.js');
 
@@ -29,7 +28,7 @@ if (isset($_POST['submit'])) {
             $idlist = \util\Misc::cleanCSV($txt);
         }
     }
-    
+
     $idtype = $_POST['idtype'];
     $outputFormat = $_POST['outputFormat'];
 
