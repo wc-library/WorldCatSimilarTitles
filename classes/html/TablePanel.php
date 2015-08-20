@@ -75,6 +75,11 @@ class TablePanel extends \html\Panel {
         return $this;
     }
 
+    public function addrow_raw($html) {
+        $this->rows .= $html;
+        return $this;
+    }
+
     public function html() {
         return "<div$this->id>$this->label<div class='table-responsive'><table>$this->thead$this->rows</table></div></div>";
     }

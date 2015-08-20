@@ -1,6 +1,7 @@
 @import "src/normalize.scss";
 @import "src/bootstrap.min.scss";
 @import "src/bootstrap-theme.min.scss";
+@import "src/_back-to-top.scss";
 
 .wcst-table {
 	@extend .table;
@@ -42,4 +43,12 @@
 #form-panel {
 	@extend .panel;
 	@extend .panel-primary;
+}
+
+#modal-data {
+	@extend .table-responsive;
+
+	table {
+		@extend .wcst-table;
+	}
 }

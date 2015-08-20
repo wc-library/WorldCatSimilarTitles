@@ -4,6 +4,9 @@ namespace oclc;
 
 class WorldCatService {
 
+    public function ajax_lookup($idtype, $id) {
+    }
+
     public function batchLookup($idtype, array $idlist, $includeRelated=true) {
         $resultset = array(
             'library' => array(),
