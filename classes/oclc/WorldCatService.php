@@ -4,7 +4,44 @@ namespace oclc;
 
 class WorldCatService {
 
-    public function ajax_lookup($idtype, $id) {
+    protected function formatRequestURL($api_path,$id,$params) {
+        return "http://www.worldcat.org/webservices".$api_path."/$id?".\http_build_query($params);
+    }
+
+    public function ajaxGetRelatedLinks($idtype, $related_ids) {
+        $params = array(
+            'oclcsymbol'=>\util\Config::$library->oclcsymbol,
+            'wskey' => \util\Config::$library->wskey,
+            'servicelevel' => 'full',
+            'format' => 'json',
+            'frbrGrouping' => 'off'
+        );
+
+        $api_path = "/catalog/content/libraries/";
+        if ($idtype !== 'OCLC') {
+            $api_path .= $idtype;
+        }
+
+        $requests = array();
+        foreach ($related_ids as $id) {
+            $requests[$id] =  $this->formatRequestURL($api_path, $id, $params);
+        }
+        $urls = array();
+        foreach ( \util\BatchRequest::make($requests)->exec() as $id=>$result ) {
+            $result = json_decode($result,true);
+            if (!isset($result["diagnostic"])) {
+                if (isset($result['library'][0])) {
+                    $libInfo = $result['library'][0];
+                    if (isset($libInfo['opacUrl'])) {
+                        $urls[$id] = $libInfo['opacUrl'];
+                    }
+                }
+            }
+            if (!array_key_exists($id,$urls)) {
+                $urls[$id] = FALSE;
+            }
+        }
+        return $urls;
     }
 
     public function batchLookup($idtype, array $idlist, $includeRelated=true) {
@@ -15,20 +52,22 @@ class WorldCatService {
             'errormsg' => null
         );
 
-        $BASEURL = "http://www.worldcat.org/webservices/catalog/content/libraries/";
-        $PARAMS = \http_build_query(array(
+        $params = array(
             'oclcsymbol'=>\util\Config::$library->oclcsymbol,
             'wskey' => \util\Config::$library->wskey,
             'servicelevel' => 'full',
             'format' => 'json',
             'frbrGrouping' => ($includeRelated)?'on':'off'
-        ));
+        );
+
+        $api_path = "/catalog/content/libraries/";
         if ($idtype !== 'OCLC') {
-            $BASEURL .= "$idtype/";
+            $api_path .= $idtype;
         }
+
         $requests = array();
         foreach ($idlist as $id) {
-            $requests[$id] =  "$BASEURL/$id?$PARAMS";
+            $requests[$id] =  $this->formatRequestURL($api_path, $id, $params);
         }
 
         foreach ( \util\BatchRequest::make($requests)->exec() as $id=>$result ) {

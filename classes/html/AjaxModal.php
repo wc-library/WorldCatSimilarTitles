@@ -44,10 +44,23 @@ class AjaxModal {
 
         $fnames = array("{$data['idtype']}#","Title","Author","Publisher","Date","Related {$data['idtype']}#s");
         $fvals = array_values($data);
-        
+
         $header = "";
         $row = "";
 
+        $fvals[6] = strtr($fvals[6],array("&nbsp;"=>",", " "=>""));
+        $relatedIDs = explode(',',$fvals[6]);
+        $n = count($relatedIDs);
+
+        $worldcat = new \oclc\WorldCatService();
+        $urls = $worldcat->ajaxGetRelatedLinks($data['idtype'],$relatedIDs);
+        for ($i=0; $i<$n; ++$i) {
+            $id = $relatedIDs[$i];
+            if ($urls[$id] !== FALSE) {
+                $relatedIDs[$i] = "<a href=\"{$urls[$id]}\" target=\"_blank\">$id</a>";
+            }
+        }
+        $fvals[6] = implode("nbsp;<br/>",$relatedIDs);
 
         for ($i=1; $i<7; $i++) {
             $header .= "<th>{$fnames[$i-1]}</th>";
