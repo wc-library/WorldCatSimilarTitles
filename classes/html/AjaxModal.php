@@ -40,7 +40,6 @@ class AjaxModal {
 
     public static function ajax_html() {
         $data = json_decode($_POST['jsonData'],true);
-        ;
 
         $fnames = array("{$data['idtype']}#","Title","Author","Publisher","Date","Related {$data['idtype']}#s");
         $fvals = array_values($data);
@@ -52,8 +51,7 @@ class AjaxModal {
         $relatedIDs = explode(',',$fvals[6]);
         $n = count($relatedIDs);
 
-        $worldcat = new \oclc\WorldCatService();
-        $urls = $worldcat->ajaxGetRelatedLinks($data['idtype'],$relatedIDs);
+        $urls = \oclc\WorldCatCatalogSearch::getLinks($data['idtype'],$relatedIDs);
         for ($i=0; $i<$n; ++$i) {
             $id = $relatedIDs[$i];
             if ($urls[$id] !== FALSE) {

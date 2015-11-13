@@ -21,6 +21,5 @@ for ($i = 0; $i < $n; ++$i) {
 }
 $list = array_unique($list, SORT_NUMERIC);
 
-$worldCat = new \oclc\WorldCatService();
-$resultset = $worldCat->batchLookup($idtype, $list);
+$resultset = \oclc\WorldCatCatalogSearch::batchLookup($idtype,$list);
 \output\FormatFactory::make($outputFormat)->display('Results',$resultset);

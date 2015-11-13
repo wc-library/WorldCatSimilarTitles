@@ -2,33 +2,44 @@
 
 namespace oclc;
 
-class WorldCatService {
+class WorldCatCatalogSearch {
 
-    protected function formatRequestURL($api_path,$id,$params) {
-        return "http://www.worldcat.org/webservices".$api_path."/$id?".\http_build_query($params);
-    }
+	protected $idtype;
+	protected $common_params;
+	protected $api_path;
 
-    public function ajaxGetRelatedLinks($idtype, $related_ids) {
-        $params = array(
-            'oclcsymbol'=>\util\Config::$library->oclcsymbol,
+	private function __construct($idtype, $frbrgrouping) {
+		$this->idtype = $idtype;
+		$this->api_path = "http://www.worldcat.org/webservices/catalog/content/libraries";
+        if ($idtype !== 'OCLC') {
+            $this->api_path .= "/$idtype";
+        }
+
+		$this->params = \http_build_query(array(
+			'oclcsymbol'=>\util\Config::$library->oclcsymbol,
             'wskey' => \util\Config::$library->wskey,
             'servicelevel' => 'full',
             'format' => 'json',
-            'frbrGrouping' => 'off'
-        );
+			'frbrgrouping' => $frbrgrouping
+        ));
+	}
 
-        $api_path = "/catalog/content/libraries/";
-        if ($idtype !== 'OCLC') {
-            $api_path .= $idtype;
+    private function formatRequests($idlist) {
+		$requests = array();
+        foreach ($idlist as $id) {
+            $requests[$id] =  "$this->api_path/$id?$this->params";
         }
+        return $requests;
+    }
 
-        $requests = array();
-        foreach ($related_ids as $id) {
-            $requests[$id] =  $this->formatRequestURL($api_path, $id, $params);
-        }
-        $urls = array();
+    public static function getLinks($idtype,$idlist) {
+		$urls = array();
+
+		$wc = new WorldCatCatalogSearch($idtype,"off");
+        $requests = $wc->formatRequests($idlist);
         foreach ( \util\BatchRequest::make($requests)->exec() as $id=>$result ) {
             $result = json_decode($result,true);
+
             if (!isset($result["diagnostic"])) {
                 if (isset($result['library'][0])) {
                     $libInfo = $result['library'][0];
@@ -44,7 +55,7 @@ class WorldCatService {
         return $urls;
     }
 
-    public function batchLookup($idtype, array $idlist, $includeRelated=true) {
+    public static function batchLookup($idtype, array $idlist) {
         $resultset = array(
             'library' => array(),
             'query' => array(),
@@ -52,26 +63,11 @@ class WorldCatService {
             'errormsg' => null
         );
 
-        $params = array(
-            'oclcsymbol'=>\util\Config::$library->oclcsymbol,
-            'wskey' => \util\Config::$library->wskey,
-            'servicelevel' => 'full',
-            'format' => 'json',
-            'frbrGrouping' => ($includeRelated)?'on':'off'
-        );
-
-        $api_path = "/catalog/content/libraries/";
-        if ($idtype !== 'OCLC') {
-            $api_path .= $idtype;
-        }
-
-        $requests = array();
-        foreach ($idlist as $id) {
-            $requests[$id] =  $this->formatRequestURL($api_path, $id, $params);
-        }
-
+		$wc = new WorldCatCatalogSearch($idtype, "on");
+		$requests = $wc->formatRequests($idlist);
         foreach ( \util\BatchRequest::make($requests)->exec() as $id=>$result ) {
             $result = json_decode($result,true);
+			
             if (isset($result["diagnostic"])) {
                 $resultset['error'][] = $id;
             } else {
@@ -122,7 +118,7 @@ class WorldCatService {
         }
 
         if (count($resultset['error'])) {
-            $resultset['errormsg'] = "$idtype search failed for ID#s: " . implode(", ",$resultset['error']);
+            $resultset['errormsg'] = "$this->idtype search failed for ID#s: " . implode(", ",$resultset['error']);
         }
 
         return  $resultset;
