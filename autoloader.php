@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @author Brandon Garcia <brandon.garcia@my.wheaton.edu>
- */
 define('BASE_DIR', dirname(__FILE__));
 
 function autoload($classname) {
