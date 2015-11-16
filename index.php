@@ -1,10 +1,11 @@
 <?php
 require_once "autoloader.php";
-$html_header = new \html\Header;
-$html_header
-    ->title("WorldCat Similar Titles")
-    ->css("style.min.css")
-    ->js('jquery.min.js','bootstrap.min.js');
+
+$html_header = new \html\Header(array(
+	'title' => "WorldCat Similar Titles",
+	'css'   => array("style.min.css"),
+	'js'    => array('jquery.min.js','bootstrap.min.js')
+));
 
 ?><!DOCTYPE html>
 <html lang="en">

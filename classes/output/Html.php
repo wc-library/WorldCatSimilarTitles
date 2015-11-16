@@ -4,48 +4,47 @@ namespace output;
 
 class Html {
 
-    protected function init_header() {
-        $this->header = new \html\Header;
-        $this->header
-            ->title("WorldCat Similar Titles")
-            ->css("style.min.css")
-            ->js('jquery.min.js','bootstrap.min.js','results.js');
-    }
-
-    protected function init_breadcrumbs() {
-        $this->breadcrumbs = \html\Breadcrumb::make(array(
-            array('index.php','Index'),
-            array('process.php','Results')
-        ));
-    }
-
-    protected function init_panels($title,$data) {
+    public function display($title,$data) {
         $idtype = $_POST['idtype'];
-        $resultset = $data['query'];
-        $library = $data['library'];
-        $searchErrors = $data['errormsg'];
 
-        $this->library_panel = \html\TablePanel::fromArray("Library","library-panel",array(
-            array("<b>Institution Name</b>",$library['institutionName']),
-            array("<b>OCLC Symbol</b>",$library['oclcSymbol']),
-            array("<b>City</b>",$library['city']),
-            array("<b>State</b>",$library['state']),
-            array("<b>Country</b>",$library['country']),
-            array("<b>Postal Code</b>",$library['postalCode'])
-        ));;
+        // initialize header
+		$this->header = new \html\Header(array(
+            'title'=>"WorldCat Similar Titles",
+            'css'=>array("style.min.css"),
+            'js'=>array('jquery.min.js','bootstrap.min.js','results.js')
+		));
 
+		// initialize breadcrumbs
+        $this->breadcrumbs = new \html\Breadcrumb(array(
+            'Index'=>'index.php',
+			'Results'=>'process.php'
+        ));
+
+		// initialize library panel
+		$this->library_panel = \html\TablePanel::fromArray("Library","library-panel",array(
+            array("<b>Institution Name</b>",\util\Config::$library->name),
+            array("<b>OCLC Symbol</b>",\util\Config::$library->oclcsymbol),
+            array("<b>City</b>",$data['library']['city']),
+            array("<b>State</b>",$data['library']['state']),
+            array("<b>Country</b>",$data['library']['country']),
+            array("<b>Postal Code</b>",$data['library']['postalCode'])
+        ));
+
+		// initialize info panel
         $this->info_panel = new \html\TextPanel('Info',"info-panel");
         $this->info_panel->setText("Rows highlighted in green indicate that a catalog url was found for the configured library.");
 
+		// initialize error panel
         $this->error_panel = null;
-        if ($searchErrors) {
+        if ($data['errormsg']) {
             $this->error_panel = new \html\TextPanel('Error','error-panel');
-            $this->error_panel->setText($searchErrors);
+            $this->error_panel->setText($data['errormsg']);
         }
 
+		// initialize results panel
         $this->results_panel = new \html\TablePanel($title,"results-panel");
         $this->results_panel->addheader(array("$idtype#","Title","Author","Publisher","Date","Related $idtype#s"));
-        foreach ($resultset as $query) {
+        foreach ($data['query'] as $query) {
             $id = $query['id'];
             $rowcls = null;
             if ($query['url']) {
@@ -63,29 +62,17 @@ class Html {
                 ."</tr>";
             $this->results_panel->addrow_raw($recordhtml);
         }
-    }
 
-    protected function init_modal($idtype) {
+		// initialize modal
         $this->modal = new \html\AjaxModal($idtype,"lookup-modal", "Modal Title");
-    }
 
-    protected function init_scrolltotop() {
-        $this->scrolltotop = "<a id='back-to-top' href='#' class='btn btn-primary btn-lg back-to-top' role='button' title='Click to return on the top page' data-toggle='tooltip' data-placement='left'><span class='glyphicon glyphicon-chevron-up'></span></a>";
-    }
-
-    public function display($title,$data) {
-        $idtype = $_POST['idtype'];
-
-        $this->init_header();
-        $this->init_breadcrumbs();
-        $this->init_panels($title, $data);
-        $this->init_modal($idtype);
-        $this->init_scrolltotop();
+		// initialize scrolltotop
+		$this->scrolltotop = "<a id='back-to-top' href='#' class='btn btn-primary btn-lg back-to-top' role='button' title='Click to return on the top page' data-toggle='tooltip' data-placement='left'><span class='glyphicon glyphicon-chevron-up'></span></a>";
 
         $container = new \html\GridDiv('container-fluid');
         $container
             ->row()
-                ->column('md-12',null,$this->breadcrumbs)
+                ->column('md-12',null,$this->breadcrumbs->html())
             ->row()
                 ->column('md-12',null,$this->library_panel->html())
             ->row();
