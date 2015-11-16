@@ -9,12 +9,12 @@ class Breadcrumb {
 		$i=0;
         $n = count($pages);
 		foreach ($pages as $label=>$url) {
-			$this->html .= "<li";
 			if ($i==($n-1)) {
-				$this->html .= " class='active'";
+				$this->html .= "<li class='active'>$label</li>";
+			} else {
+				$this->html .= "<li><a href=\"$url\">$label</a></li>";
+				++$i;
 			}
-			$this->html .= "><a href=\"$url\">$label</a></li>";
-			++$i;
 		}
 		
         $this->html.="</ol>";
