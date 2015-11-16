@@ -8,7 +8,6 @@ $(document).on('ready',function() {
 
 		var postdata = {
 			'idtype':    $(this).data('idtype'),
-			'id':        row[0],
 			'title':     row[1],
 			'author':    row[2],
 			'publisher': row[3],
@@ -16,8 +15,11 @@ $(document).on('ready',function() {
 			'related':   row[5]
 		};
 
+		var title = $(this).data('idtype').concat('# ',row[0]);
+
 		$.post('ajax_modal.php',{ jsonData: JSON.stringify(postdata) },function(data,status){
 			$('#lookup-modal').find('.modal-body').html(data);
+			$('#lookup-modal').find('.modal-title').html(title);
 		});
 	});
 
