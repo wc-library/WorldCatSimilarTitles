@@ -18,8 +18,7 @@ class AjaxModal {
         $header = "";
         $row = "";
 
-        $fvals[6] = strtr($fvals[6],array("&nbsp;"=>",", " "=>""));
-        $relatedIDs = explode(',',$fvals[6]);
+		$relatedIDs = explode(',',preg_replace("/[^0-9]+/",',',$fvals[6]));
         $n = count($relatedIDs);
 
         $urls = \oclc\WorldCatCatalogSearch::getLinks($data['idtype'],$relatedIDs);
@@ -29,7 +28,7 @@ class AjaxModal {
                 $relatedIDs[$i] = "<a href=\"{$urls[$id]}\" target=\"_blank\">$id</a>";
             }
         }
-        $fvals[6] = implode("nbsp;<br/>",$relatedIDs);
+        $fvals[6] = implode("&nbsp;<br/>",$relatedIDs);
 
         for ($i=1; $i<7; $i++) {
             $header .= "<th>{$fnames[$i-1]}</th>";

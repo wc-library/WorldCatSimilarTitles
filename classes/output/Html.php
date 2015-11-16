@@ -58,7 +58,7 @@ class Html {
                     ."<td>{$query['author']}</td>"
                     ."<td>{$query['publisher']}</td>"
                     ."<td>{$query['date']}</td>"
-                    ."<td>".\implode("&nbsp;<br>",$query['related'])."</td>"
+                    ."<td>".\implode("&nbsp;<br/>",$query['related'])."</td>"
                 ."</tr>";
             $this->results_panel->addrow_raw($recordhtml);
         }
