@@ -63,6 +63,7 @@ if (isset($_POST['submit'])) {
             ->option('xml','XML')
         ->file('idlist_file','Import IDs (CSV or line breaks)')
         ->textarea('idlist_textarea','ID List (CSV or line breaks)')
+		->checkbox("hide_unique","Ignore entries w/o related titles")
         ->button('submit','Submit','btn btn-primary');
 
     $container = new \html\GridDiv("container");

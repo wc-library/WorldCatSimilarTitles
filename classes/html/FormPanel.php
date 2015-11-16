@@ -72,6 +72,15 @@ final class FormPanel extends \html\Panel{
         return $this;
     }
 
+	public function checkbox($name,$label) {
+		$this->setNodeId();
+		$this->inputs[$this->node_id] = $this->inputBlock($name,$label,
+				"<div class=\"checkbox\">
+					<input type=\"checkbox\" value=\"\" name=\"$name\" id=\"$name\">
+				</div>");
+		return $this;
+	}
+
     public function button($name,$label,$class) {
         $this->setNodeId();
         $this->inputs[$this->node_id] =

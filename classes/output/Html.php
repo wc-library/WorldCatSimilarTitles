@@ -36,9 +36,9 @@ class Html {
 
 		// initialize error panel
         $this->error_panel = null;
-        if ($data['errormsg']) {
+        if (!empty($data['error'])) {
             $this->error_panel = new \html\TextPanel('Error','error-panel');
-            $this->error_panel->setText($data['errormsg']);
+            $this->error_panel->setText($data['error']);
         }
 
 		// initialize results panel

@@ -1,7 +1,7 @@
 <?php
 require_once 'autoloader.php';
 
-\util\PHPProfiler::run();
+#\util\PHPProfiler::run();
 
 if (!isset($_POST['idlist'])) {
     header("location: index.php");
@@ -10,6 +10,7 @@ if (!isset($_POST['idlist'])) {
 $list = explode(',', $_POST['idlist']);
 $idtype = strtoupper($_POST['idtype']);
 $outputFormat = $_POST['outputFormat'];
+$flag_hide_unique = isset($_POST['hide_unique']);
 
 $n = count($list);
 for ($i = 0; $i < $n; ++$i) {
@@ -21,5 +22,5 @@ for ($i = 0; $i < $n; ++$i) {
 }
 $list = array_unique($list, SORT_NUMERIC);
 
-$resultset = \oclc\WorldCatCatalogSearch::batchLookup($idtype,$list);
+$resultset = \oclc\WorldCatCatalogSearch::batchLookup($idtype,$list,$flag_hide_unique);
 \output\FormatFactory::make($outputFormat)->display('Results',$resultset);

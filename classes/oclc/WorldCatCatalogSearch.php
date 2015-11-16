@@ -55,12 +55,17 @@ class WorldCatCatalogSearch {
         return $urls;
     }
 
-    public static function batchLookup($idtype, array $idlist) {
+    public static function batchLookup($idtype, array $idlist, $hide_unique=false) {
+		$failedIDs = array();
+
         $resultset = array(
-            'library' => array(),
+            'library' => array(
+				'city'=>'',
+				'state'=>'',
+				'country'=>'',
+				'postalcode'=>''),
             'query' => array(),
-            'error' => array(),
-            'errormsg' => null
+            'error' => "",
         );
 
 		$wc = new WorldCatCatalogSearch($idtype, "on");
@@ -69,7 +74,7 @@ class WorldCatCatalogSearch {
             $result = json_decode($result,true);
 			
             if (isset($result["diagnostic"])) {
-                $resultset['error'][] = $id;
+				$failedIDs[] = $id;
             } else {
                 $query = array(
                     '@attributes' => array('idtype'=>$idtype),
@@ -85,40 +90,40 @@ class WorldCatCatalogSearch {
 
                 if (isset($result[$idtype]) && is_array($result[$idtype])) {
                     $query['related'] = $result[$idtype];
+					
+					if(($key = array_search($id,$query['related'])) !== false) {
+						unset($query['related'][$key]);
+					}
+				}
 
-                    if(($key = array_search($id,$query['related'])) !== false) {
-                        unset($query['related'][$key]);
-                    }
+				if (isset($result['library'][0])) {
+					$libInfo = $result['library'][0];
+					if (isset($libInfo['opacUrl'])) {
+						$query['url'] = $libInfo['opacUrl'];
+					}
 
-                    if (isset($result['library'][0])) {
-                        $libInfo = $result['library'][0];
-                        if (isset($libInfo['opacUrl'])) {
-                            $query['url'] = $libInfo['opacUrl'];
-                        }
+					if (isset($libInfo['institutionName']) && !isset($resultset['library']['institutionName'])) {
+						$resultset['library'] = array(
+							'institutionName' => $libInfo['institutionName'],
+							'oclcSymbol'      => $libInfo['oclcSymbol'],
+							'city'            => $libInfo['city'],
+							'state'           => $libInfo['state'],
+							'country'         => $libInfo['country'],
+							'postalCode'      => $libInfo['postalCode']
+						);
+					}
+				} else {
+					$query['library'] = 'Holding not found!';
+				}
 
-                        if (isset($libInfo['institutionName']) && !isset($resultset['library']['institutionName'])) {
-                            $resultset['library'] = array(
-                                'institutionName' => $libInfo['institutionName'],
-                                'oclcSymbol'      => $libInfo['oclcSymbol'],
-                                'city'            => $libInfo['city'],
-                                'state'           => $libInfo['state'],
-                                'country'         => $libInfo['country'],
-                                'postalCode'      => $libInfo['postalCode']
-                            );
-                        }
-                    } else {
-                        $query['library'] = 'Holding not found!';
-                    }
-
-                    if (count($query['related'])) {
-                        $resultset['query'][] = $query;
-                    }
-                }
+				if (count($query['related']) || $hide_unique===false) {
+					$resultset['query'][] = $query;
+				}
             }
         }
 
-        if (count($resultset['error'])) {
-            $resultset['errormsg'] = "$this->idtype search failed for ID#s: " . implode(", ",$resultset['error']);
+        if (count($failedIDs)>0) {
+            $resultset['error'] = "$idtype search failed for ID#s: " . implode(", ",$failedIDs);
         }
 
         return  $resultset;
