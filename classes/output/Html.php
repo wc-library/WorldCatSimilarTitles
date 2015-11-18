@@ -32,7 +32,7 @@ class Html {
 
 		// initialize info panel
         $this->info_panel = new \html\TextPanel('Info',"info-panel");
-        $this->info_panel->setText("Rows highlighted in green indicate that a catalog url was found for the configured library.");
+        $this->info_panel->setText($data['info']);
 
 		// initialize error panel
         $this->error_panel = null;

@@ -57,6 +57,7 @@ class WorldCatCatalogSearch {
 
     public static function batchLookup($idtype, array $idlist, $hide_unique=false) {
 		$failedIDs = array();
+		$numSkippedIDs = 0;
 
         $resultset = array(
             'library' => array(
@@ -66,6 +67,7 @@ class WorldCatCatalogSearch {
 				'postalcode'=>''),
             'query' => array(),
             'error' => "",
+			'info' => "Rows highlighted in green indicate that a catalog url was found for the configured library."
         );
 
 		$wc = new WorldCatCatalogSearch($idtype, "on");
@@ -116,15 +118,21 @@ class WorldCatCatalogSearch {
 					$query['library'] = 'Holding not found!';
 				}
 
-				if (count($query['related']) || $hide_unique===false) {
+				if (count($query['related']) || !$hide_unique) {
 					$resultset['query'][] = $query;
+				} else if ($hide_unique) {
+					$numSkippedIDs++;
 				}
             }
         }
 
-        if (count($failedIDs)>0) {
+        if (count($failedIDs)) {
             $resultset['error'] = "$idtype search failed for ID#s: " . implode(", ",$failedIDs);
         }
+
+		if ($numSkippedIDs) {
+			$resultset['info'] .= "<br>$numSkippedIDs ID#s were ignored...";
+		}
 
         return  $resultset;
     }
