@@ -55,14 +55,14 @@ if (isset($_POST['submit'])) {
         $form->error($_POST['errormsg']);
     }
     $form
-        ->select('idtype','ID Type',true)
-            ->option('isbn','ISBN Numbers')
-            ->option('issn','ISSN Numbers')
-            ->option('oclc','OCLC Numbers')
-            ->option('sn','Standard Numbers')
-        ->select('outputFormat','Output Format',true)
-            ->option('html','HTML')
-            ->option('xml','XML')
+        ->select('idtype','ID Type',true,array(
+            'isbn'=>'ISBN Numbers',
+            'issn'=>'ISSN Numbers',
+            'oclc'=>'OCLC Numbers',
+            'sn'=>'Standard Numbers'))
+        ->select('outputFormat','Output Format',true,array(
+            'html'=>'HTML',
+            'xml'=>'XML'))
         ->file('idlist_file','Import IDs (CSV or line breaks)')
         ->textarea('idlist_textarea','ID List (CSV or line breaks)')
 		->checkbox("hideunique","Ignore entries w/o related titles")
