@@ -35,6 +35,7 @@ if (isset($_POST['submit'])) {
 
     $params['idtype'] = $idtype;
     $params['outputFormat'] = $outputFormat;
+	$params['hideunique'] = isset($_POST['hide_unique'])?1:0;
 
     if (trim($idlist)=="") {
         $params['errormsg'] = "Cannot submit without IDs!";
@@ -43,7 +44,8 @@ if (isset($_POST['submit'])) {
         $params = array(
             'idlist' => $idlist,
             'idtype' => $idtype,
-            'outputFormat' => $outputFormat
+            'outputFormat' => $outputFormat,
+			'hideunique' => isset($_POST['hideunique'])?1:0
             );
         echo \html\FormPanel::makeHiddenForm("CSVForm","process.php",$params);
     }
@@ -63,7 +65,7 @@ if (isset($_POST['submit'])) {
             ->option('xml','XML')
         ->file('idlist_file','Import IDs (CSV or line breaks)')
         ->textarea('idlist_textarea','ID List (CSV or line breaks)')
-		->checkbox("hide_unique","Ignore entries w/o related titles")
+		->checkbox("hideunique","Ignore entries w/o related titles")
         ->button('submit','Submit','btn btn-primary');
 
     $container = new \html\GridDiv("container");

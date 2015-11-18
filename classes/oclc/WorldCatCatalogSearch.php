@@ -5,7 +5,7 @@ namespace oclc;
 class WorldCatCatalogSearch {
 
 	protected $idtype;
-	protected $common_params;
+	protected $params;
 	protected $api_path;
 
 	private function __construct($idtype, $frbrgrouping) {

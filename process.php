@@ -10,7 +10,7 @@ if (!isset($_POST['idlist'])) {
 $list = explode(',', $_POST['idlist']);
 $idtype = strtoupper($_POST['idtype']);
 $outputFormat = $_POST['outputFormat'];
-$flag_hide_unique = isset($_POST['hide_unique']);
+$flag_hide_unique = $_POST['hideunique']==1;
 
 $n = count($list);
 for ($i = 0; $i < $n; ++$i) {
