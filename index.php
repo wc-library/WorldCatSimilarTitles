@@ -57,9 +57,9 @@ if (isset($_POST['submit'])) {
     $form
         ->select('idtype','ID Type',true,array(
             'isbn'=>'ISBN Numbers',
-            'issn'=>'ISSN Numbers',
-            'oclc'=>'OCLC Numbers',
-            'sn'=>'Standard Numbers'))
+            'issn'=>'ISSN Numbers'))
+//            'oclc'=>'OCLC Numbers',
+//            'sn'=>'Standard Numbers'))
         ->select('outputFormat','Output Format',true,array(
             'html'=>'HTML',
             'xml'=>'XML'))
